@@ -180,12 +180,13 @@ header.sc{border-color:var(–border);box-shadow:0 4px 32px rgba(0,0,0,.6)}
 
 /* ── LOCATION ── */
 .loc-in{display:grid;grid-template-columns:1fr 1.5fr;gap:clamp(36px,7vw,64px);align-items:start}
-.cr{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(–border)}
+.cr{display:flex;gap:14px;align-items:flex-start;padding:18px 0;border-bottom:1px solid var(–border);min-width:0}
 .cr:last-of-type{border-bottom:none}
-.cr-ic{width:40px;height:40px;border-radius:10px;background:rgba(88,176,179,.08);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cr-ic{width:42px;height:42px;min-width:42px;border-radius:10px;background:rgba(88,176,179,.08);display:flex;align-items:center;justify-content:center}
 .cr-ic svg{color:var(–teal)}
-.cr-l{font-size:.54rem;letter-spacing:2px;text-transform:uppercase;color:var(–muted);margin-bottom:3px}
-.cr-v{font-size:.9rem;font-weight:600;color:var(–txt);line-height:1.5}
+.cr-txt{min-width:0;flex:1}
+.cr-l{font-size:.54rem;letter-spacing:2px;text-transform:uppercase;color:var(–muted);margin-bottom:4px;display:block}
+.cr-v{font-size:.9rem;font-weight:600;color:var(–txt);line-height:1.5;word-break:break-word}
 .cr-v a{color:var(–txt);transition:color .2s}
 .cr-v a:hover{color:var(–teal)}
 .cr-v small{font-weight:400;font-size:.8rem;color:var(–muted)}
@@ -199,7 +200,7 @@ header.sc{border-color:var(–border);box-shadow:0 4px 32px rgba(0,0,0,.6)}
 .cta-h em{font-style:italic;color:#b2eff1}
 .cta-sub{font-size:.96rem;color:rgba(255,255,255,.6);margin-bottom:32px;max-width:400px;margin-left:auto;margin-right:auto;line-height:1.7;position:relative}
 .cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative}
-.btn-cw{background:#fff;color:var(–txd);padding:16px 32px;border-radius:12px;font-weight:800;font-size:.96rem;display:flex;align-items:center;gap:9px;min-height:54px;min-width:160px;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.25);transition:transform .15s;touch-action:manipulation;cursor:none}
+.btn-cw{background:#fff;color:#0f2020 !important;padding:16px 32px;border-radius:12px;font-weight:800;font-size:.96rem;display:flex;align-items:center;gap:9px;min-height:54px;min-width:160px;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.25);transition:transform .15s;touch-action:manipulation;cursor:none}
 .btn-cw:active{transform:scale(.97)}
 .btn-co{background:transparent;color:#fff;padding:16px 28px;border-radius:12px;border:2px solid rgba(255,255,255,.4);font-weight:700;font-size:.96rem;display:flex;align-items:center;gap:9px;min-height:54px;min-width:160px;justify-content:center;touch-action:manipulation;transition:border-color .2s,background .2s;cursor:none}
 .btn-co:active{border-color:#fff;background:rgba(255,255,255,.1)}
@@ -279,7 +280,8 @@ MOBILE  ≤768px
 .cta-btns{flex-direction:column;align-items:stretch;max-width:360px;margin-left:auto;margin-right:auto}
 .btn-cw,.btn-co{width:100%;min-width:0}
 /* mappa */
-.mapbox iframe{height:300px}
+.loc-in{grid-template-columns:1fr;gap:32px}
+.mapbox iframe{height:280px}
 .mapbox{border-radius:12px}
 /* footer */
 .ft-top{grid-template-columns:1fr;gap:24px}
@@ -290,9 +292,10 @@ MOBILE  ≤768px
 .sc-img{height:160px}
 }
 @media(max-width:480px){
-.ggrid{grid-template-columns:1fr}
-.gi-big{grid-column:auto;height:64vw;min-height:200px;max-height:280px}
-.gi:not(.gi-big){height:52vw;min-height:160px;max-height:220px}
+.sgrid{grid-template-columns:1fr}
+.sc-img{height:200px}
+.gi-big{grid-column:span 2;height:62vw;min-height:200px;max-height:280px}
+.gi:not(.gi-big){height:50vw;min-height:160px;max-height:220px}
 }
 </style>
 
@@ -527,15 +530,27 @@ MOBILE  ≤768px
 <section id="dove-siamo" class="sec">
   <div class="wrap">
     <div class="loc-in">
-      <div class="rl">
-        <p class="ey">Contatti & Orari</p>
-        <h2 class="sh">Vieni a <em>Trovarci</em></h2>
-        <div class="cr"><div class="cr-ic"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><p class="cr-l">Indirizzo</p><p class="cr-v">Via M.R. Imbriani, 72 – 70033 Corato (BT)</p></div></div>
-        <div class="cr"><div class="cr-ic"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.09a16 16 0 006 6l.36-.36a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div><div><p class="cr-l">Telefono</p><p class="cr-v"><a href="tel:+390808170385">080 817 0385</a> · <a href="tel:+393806881599">380 688 1599</a></p></div></div>
-        <div class="cr"><div class="cr-ic"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div><p class="cr-l">Email</p><p class="cr-v"><a href="mailto:oriscura10@gmail.com">oriscura10@gmail.com</a></p></div></div>
-        <div class="cr"><div class="cr-ic"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div><p class="cr-l">Orari</p><p class="cr-v">Lun–Ven: 10:00–12:00 · 16:00–19:00<br><small>Solo su appuntamento</small></p></div></div>
+      <div>
+        <p class="ey rv">Contatti & Orari</p>
+        <h2 class="sh rv d1">Vieni a <em>Trovarci</em></h2>
+        <div class="cr rv d2">
+          <div class="cr-ic"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div class="cr-txt"><span class="cr-l">Indirizzo</span><p class="cr-v">Via M.R. Imbriani, 72 – 70033 Corato (BT)</p></div>
+        </div>
+        <div class="cr rv d2">
+          <div class="cr-ic"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.09a16 16 0 006 6l.36-.36a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+          <div class="cr-txt"><span class="cr-l">Telefono</span><p class="cr-v"><a href="tel:+390808170385">080 817 0385</a> · <a href="tel:+393806881599">380 688 1599</a></p></div>
+        </div>
+        <div class="cr rv d2">
+          <div class="cr-ic"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div class="cr-txt"><span class="cr-l">Email</span><p class="cr-v"><a href="mailto:oriscura10@gmail.com">oriscura10@gmail.com</a></p></div>
+        </div>
+        <div class="cr rv d2">
+          <div class="cr-ic"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div class="cr-txt"><span class="cr-l">Orari</span><p class="cr-v">Lun–Ven: 10:00–12:00 · 16:00–19:00<br><small>Solo su appuntamento</small></p></div>
+        </div>
       </div>
-      <div class="mapbox rr">
+      <div class="mapbox rv d3">
         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3004.323321253266!2d16.409141575866002!3d41.14929577133117!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x13380f8aa5a36d75%3A0x75283965b4708489!2sOris%20Cura%20Srl%20%2F%20Stp!5e0!3m2!1sit!2sit!4v1724703948782!5m2!1sit!2sit" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
     </div>

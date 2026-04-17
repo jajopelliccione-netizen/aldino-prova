@@ -126,8 +126,8 @@ header.sc{border-color:var(–border);box-shadow:0 4px 32px rgba(0,0,0,.6)}
 .sc{background:var(–d2);border:1px solid var(–border);border-radius:18px;overflow:hidden;transition:transform .35s,border-color .35s,box-shadow .35s;cursor:none}
 .sc:hover{transform:translateY(-6px);border-color:rgba(88,176,179,.3);box-shadow:0 20px 48px rgba(0,0,0,.5)}
 /* IMAGE BOX — explicit height, never collapses */
-.sc-img{width:100%;height:180px;overflow:hidden;background:var(–d3);flex-shrink:0}
-.sc-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .55s}
+.sc-img{width:100%;height:190px;overflow:hidden;background:var(–d3);flex-shrink:0;display:block}
+.sc-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .55s;max-width:none}
 .sc:hover .sc-img img{transform:scale(1.05)}
 .sc-b{padding:18px 18px 22px}
 .sc-n{font-size:.58rem;letter-spacing:3px;color:var(–teal);font-weight:700;margin-bottom:6px}
@@ -137,13 +137,13 @@ header.sc{border-color:var(–border);box-shadow:0 4px 32px rgba(0,0,0,.6)}
 /* ── STATS ── */
 .stats{background:var(–txd);padding:0;position:relative;z-index:2}
 .st-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.1)}
-.st{padding:clamp(28px,5vw,48px) 16px;background:var(–txd);text-align:center}
-.st-n{font-family:‘DM Serif Display’,serif;font-size:clamp(2.2rem,5vw,3.4rem);color:#fff;line-height:1;margin-bottom:6px}
-.st-n i{font-style:italic;color:#7de8eb}
-.st-l{font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.55);font-weight:700}
+.st{padding:clamp(28px,5vw,48px) 12px;background:var(–txd);text-align:center}
+.st-n{font-family:‘DM Serif Display’,serif;font-size:clamp(2.6rem,5.5vw,3.6rem);color:#fff;line-height:1;margin-bottom:8px;white-space:nowrap}
+.st-n i{font-style:italic;color:#7de8eb;font-size:.85em}
+.st-l{font-size:clamp(.55rem,.9vw,.65rem);letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.6);font-weight:700;line-height:1.4}
 
 /* ── GALLERY ── */
-.ggrid{display:grid;grid-template-columns:1.5fr 1fr 1fr;grid-template-rows:clamp(200px,26vw,300px) clamp(160px,20vw,240px);gap:8px}
+.ggrid{display:grid;grid-template-columns:1.5fr 1fr 1fr;grid-template-rows:clamp(220px,28vw,320px) clamp(170px,21vw,250px);gap:8px}
 .gi{position:relative;overflow:hidden;border-radius:12px;background:var(–d3)}
 .gi-big{grid-row:span 2}
 /* CRITICAL: explicit height on every gallery item */
@@ -192,7 +192,7 @@ header.sc{border-color:var(–border);box-shadow:0 4px 32px rgba(0,0,0,.6)}
 .cr-v a:hover{color:var(–teal)}
 .cr-v small{font-weight:400;font-size:.8rem;color:var(–muted)}
 .mapbox{border-radius:16px;overflow:hidden;border:1px solid var(–border);box-shadow:0 14px 44px rgba(0,0,0,.5)}
-.mapbox iframe{width:100%;height:clamp(300px,36vw,440px);border:none;display:block;filter:brightness(.8) saturate(.5) hue-rotate(160deg)}
+.mapbox iframe{width:100%;height:clamp(320px,40vw,460px);border:none;display:block}
 
 /* ── CTA ── */
 .cta{background:var(–txd);padding:clamp(64px,10vw,96px) clamp(22px,5vw,52px);text-align:center;position:relative;z-index:2;overflow:hidden}
@@ -265,6 +265,9 @@ MOBILE  ≤768px
 .sc-img{height:200px}
 /* stats */
 .st-row{grid-template-columns:1fr 1fr}
+.st{padding:28px 10px}
+.st-n{font-size:2.6rem}
+.st-l{font-size:.62rem;letter-spacing:1px}
 /* gallery — big full width, rest 2 col */
 .ggrid{grid-template-columns:1fr 1fr;grid-template-rows:auto}
 .gi-big{grid-column:span 2;height:clamp(200px,52vw,300px)}
@@ -277,6 +280,9 @@ MOBILE  ≤768px
 /* cta */
 .cta-btns{flex-direction:column;align-items:stretch;max-width:360px;margin-left:auto;margin-right:auto}
 .btn-cw,.btn-co{width:100%;min-width:0}
+/* mappa */
+.mapbox iframe{height:300px}
+.mapbox{border-radius:12px}
 /* footer */
 .ft-top{grid-template-columns:1fr;gap:24px}
 .ft-bot{flex-direction:column;align-items:flex-start}
@@ -642,7 +648,7 @@ document.querySelectorAll('.rv,.rl,.rr').forEach(el => ro.observe(el));
 function animC(el, t) { let v=0, s=t/55; const iv=setInterval(()=>{v=Math.min(v+s,t); el.textContent=Math.floor(v).toLocaleString('it-IT'); if(v>=t){el.textContent=t.toLocaleString('it-IT');clearInterval(iv);}},22); }
 const co = new IntersectionObserver(es => {
   es.forEach(e => { if (e.isIntersecting) { e.target.querySelectorAll('.cnt').forEach(c=>animC(c,+c.dataset.t)); co.unobserve(e.target); } });
-}, { threshold: 0.3 });
+}, { threshold: 0.1 });
 document.querySelectorAll('.st-row').forEach(el => co.observe(el));
 </script>
 

@@ -72,10 +72,10 @@ header.sc{border-color:var(–border);box-shadow:0 4px 32px rgba(0,0,0,.6)}
 .hero-slides{position:absolute;inset:0}
 .hs{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.8s ease,transform 8s cubic-bezier(.16,1,.3,1);transform:scale(1.06)}
 .hs.on{opacity:1;transform:scale(1)}
-.h1{background-image:url(‘IMG_8505.png’)}
-.h2{background-image:url(‘IMG_8506.png’);background-position:center 30%}
-.h3{background-image:url(‘IMG_3636.png’)}
-.h4{background-image:url(‘IMG_3637.png’)}
+.sl1{background-image:url(‘IMG_8505.png’)}
+.sl2{background-image:url(‘IMG_8506.png’);background-position:center 30%}
+.sl3{background-image:url(‘IMG_3636.png’)}
+.sl4{background-image:url(‘IMG_3637.png’)}
 .hero-dim{position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(4,8,15,.4) 0%,rgba(4,8,15,.15) 30%,rgba(4,8,15,.8) 85%,rgba(4,8,15,.97) 100%)}
 .hero-c{position:relative;z-index:2;padding:0 clamp(22px,5vw,52px) clamp(52px,9vw,84px);width:100%;max-width:820px}
 .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(88,176,179,.1);border:1px solid rgba(88,176,179,.3);backdrop-filter:blur(8px);padding:6px 14px;border-radius:100px;margin-bottom:18px;opacity:0;animation:up .6s .1s forwards}
@@ -143,15 +143,13 @@ header.sc{border-color:var(–border);box-shadow:0 4px 32px rgba(0,0,0,.6)}
 .st-l{font-size:clamp(.55rem,.9vw,.65rem);letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.6);font-weight:700;line-height:1.4}
 
 /* ── GALLERY ── */
-.ggrid{display:grid;grid-template-columns:1.5fr 1fr 1fr;grid-template-rows:clamp(220px,28vw,320px) clamp(170px,21vw,250px);gap:8px}
+.ggrid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:8px}
 .gi{position:relative;overflow:hidden;border-radius:12px;background:var(–d3)}
-.gi-big{grid-row:span 2}
-/* CRITICAL: explicit height on every gallery item */
-.gi-big{height:auto} /* spans 2 rows, no fixed needed */
-.gi:not(.gi-big){height:100%}
-.gi img,.gi video{width:100%;height:100%;object-fit:cover;display:block;transition:transform .65s}
+.gi-big{height:clamp(420px,52vw,580px)}
+.gi:not(.gi-big){height:clamp(180px,25vw,280px)}
+.gi img,.gi video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .65s}
 .gi:hover img,.gi:hover video{transform:scale(1.05)}
-.gi-ov{position:absolute;inset:0;background:linear-gradient(0deg,rgba(4,8,15,.6) 0%,transparent 50%);display:flex;align-items:flex-end;padding:14px;pointer-events:none}
+.gi-ov{position:absolute;inset:0;background:linear-gradient(0deg,rgba(4,8,15,.6) 0%,transparent 50%);display:flex;align-items:flex-end;padding:14px;pointer-events:none;z-index:1}
 .gi-l{font-size:.64rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.7);font-weight:700}
 
 /* ── EQUIPMENT ── */
@@ -268,10 +266,10 @@ MOBILE  ≤768px
 .st{padding:28px 10px}
 .st-n{font-size:2.6rem}
 .st-l{font-size:.62rem;letter-spacing:1px}
-/* gallery — big full width, rest 2 col */
-.ggrid{grid-template-columns:1fr 1fr;grid-template-rows:auto}
-.gi-big{grid-column:span 2;height:clamp(200px,52vw,300px)}
-.gi:not(.gi-big){height:clamp(140px,34vw,200px)}
+/* gallery */
+.ggrid{grid-template-columns:1fr 1fr}
+.gi-big{grid-column:span 2;height:56vw;min-height:220px;max-height:320px}
+.gi:not(.gi-big){height:44vw;min-height:170px;max-height:240px}
 /* equipment */
 .eq-imgs .iw:first-child{height:200px}
 .eq-imgs .iw:not(:first-child){height:150px}
@@ -293,8 +291,8 @@ MOBILE  ≤768px
 }
 @media(max-width:480px){
 .ggrid{grid-template-columns:1fr}
-.gi-big{grid-column:auto;height:clamp(200px,56vw,280px)}
-.gi:not(.gi-big){height:clamp(160px,44vw,220px)}
+.gi-big{grid-column:auto;height:64vw;min-height:200px;max-height:280px}
+.gi:not(.gi-big){height:52vw;min-height:160px;max-height:220px}
 }
 </style>
 
@@ -344,10 +342,10 @@ MOBILE  ≤768px
 
 <section id="home" class="hero">
   <div class="hero-slides">
-    <div class="hs h1 on"></div>
-    <div class="hs h2"></div>
-    <div class="hs h3"></div>
-    <div class="hs h4"></div>
+    <div class="hs sl1 on"></div>
+    <div class="hs sl2"></div>
+    <div class="hs sl3"></div>
+    <div class="hs sl4"></div>
   </div>
   <div class="hero-dim"></div>
   <div class="hdots">
@@ -453,29 +451,29 @@ MOBILE  ≤768px
     <div class="rv" style="margin-bottom:36px"><p class="ey">Lo Studio in Immagini</p><h2 class="sh" style="margin-bottom:0">Uno <em>Spazio</em> Unico</h2></div>
     <div class="ggrid">
       <div class="gi gi-big rv">
-        <video autoplay muted loop playsinline poster="poster1.jpg" style="width:100%;height:100%;object-fit:cover;display:block">
+        <video autoplay muted loop playsinline poster="poster1.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">
           <source src="video1.mp4" type="video/mp4">
-          <img src="poster1.jpg" alt="Studio" style="width:100%;height:100%;object-fit:cover;display:block">
+          <img src="poster1.jpg" alt="Studio" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">
         </video>
         <div class="gi-ov"><span class="gi-l">Esperienza</span></div>
       </div>
       <div class="gi rv d1">
-        <img src="IMG_3591.png" alt="Il Nostro Studio" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">
+        <img src="IMG_3591.png" alt="Il Nostro Studio" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">
         <div class="gi-ov"><span class="gi-l">Il Nostro Studio</span></div>
       </div>
       <div class="gi rv d2">
-        <video autoplay muted loop playsinline poster="poster2.jpg" style="width:100%;height:100%;object-fit:cover;display:block">
+        <video autoplay muted loop playsinline poster="poster2.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">
           <source src="video2.mp4" type="video/mp4">
-          <img src="poster2.jpg" alt="Sala" style="width:100%;height:100%;object-fit:cover;display:block">
+          <img src="poster2.jpg" alt="Sala" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">
         </video>
         <div class="gi-ov"><span class="gi-l">Sala Secondaria</span></div>
       </div>
       <div class="gi rv d3">
-        <img src="IMG_3637.png" alt="Precisione" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">
+        <img src="IMG_3637.png" alt="Precisione" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">
         <div class="gi-ov"><span class="gi-l">Precisione</span></div>
       </div>
       <div class="gi rv d4">
-        <img src="IMG_3635.png" alt="Sala Principale" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">
+        <img src="IMG_3635.png" alt="Sala Principale" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">
         <div class="gi-ov"><span class="gi-l">Sala Principale</span></div>
       </div>
     </div>

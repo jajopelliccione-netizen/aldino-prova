@@ -4,517 +4,1080 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>OrisCura – Studio di Odontoiatria Specialistica | Corato</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#050a0a">
+<title>OrisCura – Odontoiatria Specialistica | Corato</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --teal:#3d9ea1;--teal2:#58b0b3;--teal3:#1d6568;
-  --teal-pale:#e8f6f6;--teal-pale2:#cce9e9;
-  --ink:#0f1c1c;--ink2:#2a3d3d;--muted:#6b8080;
-  --border:#dde9e9;--bg:#ffffff;--bg2:#f4fafa;
-  --gold:#b8924a;
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+–teal: #58b0b3;
+–teal-dark: #2e8a8d;
+–teal-xdark: #1a5c5e;
+–teal-glow: rgba(88,176,179,0.2);
+–black: #050a0a;
+–dark1: #0a1010;
+–dark2: #0f1818;
+–dark3: #162020;
+–line: rgba(88,176,179,0.15);
+–text: #e8f0f0;
+–muted: #7a9898;
 }
-html{scroll-behavior:smooth}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
-a{text-decoration:none;color:inherit}
-img,video{display:block;max-width:100%}
 
-/* progress */
-#bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(–teal3),var(–teal2));z-index:500;width:0;box-shadow:0 0 8px rgba(88,176,179,.4)}
+html { scroll-behavior: smooth; }
 
+body {
+font-family: ‘Montserrat’, sans-serif;
+background: var(–black);
+color: var(–text);
+overflow-x: hidden;
+-webkit-font-smoothing: antialiased;
+-webkit-tap-highlight-color: transparent;
+}
+
+a { text-decoration: none; color: inherit; }
+img, video { display: block; }
+
+/* ─── PROGRESS BAR ─── */
+#prog {
+position: fixed; top: 0; left: 0; height: 2px;
+background: linear-gradient(90deg, var(–teal-xdark), var(–teal));
+z-index: 1000; width: 0; transition: width .08s linear;
+box-shadow: 0 0 10px rgba(88,176,179,.5);
+}
+
+/* ─── HEADER ─── */
+header {
+position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+height: 68px;
+display: flex; align-items: center; justify-content: space-between;
+padding: 0 24px;
+background: rgba(5,10,10,0.92);
+backdrop-filter: blur(16px);
+-webkit-backdrop-filter: blur(16px);
+border-bottom: 1px solid var(–line);
+transition: box-shadow .3s;
+}
+header.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,.6); }
+
+.logo {
+display: flex; align-items: center; gap: 10px;
+flex-shrink: 0;
+}
+.logo-img {
+height: 36px; width: auto;
+filter: brightness(1.1);
+}
+.logo-sep {
+width: 1px; height: 26px;
+background: linear-gradient(180deg, transparent, var(–teal), transparent);
+flex-shrink: 0;
+}
+.logo-words { display: flex; flex-direction: column; gap: 1px; }
+.logo-name {
+font-size: 1.25rem; font-weight: 900;
+letter-spacing: 4px; text-transform: uppercase; line-height: 1;
+}
+.logo-name .w1 { color: #fff; }
+.logo-name .w2 { color: var(–teal); }
+.logo-tagline {
+font-size: .38rem; letter-spacing: 3px; text-transform: uppercase;
+color: var(–muted); font-weight: 600;
+}
+
+/* desktop links */
+.desk-links {
+display: flex; align-items: center; gap: 2px;
+}
+.desk-links a {
+font-size: .68rem; font-weight: 700; letter-spacing: 1.5px;
+text-transform: uppercase; color: var(–muted);
+padding: 8px 14px; border-radius: 6px;
+transition: color .2s, background .2s; white-space: nowrap;
+}
+.desk-links a:hover { color: #fff; background: rgba(255,255,255,.04); }
+.desk-links .book-btn {
+background: var(–teal); color: #fff !important;
+padding: 9px 20px; border-radius: 8px;
+box-shadow: 0 4px 16px rgba(88,176,179,.3);
+font-weight: 800;
+transition: background .2s, transform .15s, box-shadow .2s;
+}
+.desk-links .book-btn:hover {
+background: var(–teal-dark);
+transform: translateY(-1px);
+box-shadow: 0 8px 24px rgba(88,176,179,.4);
+}
+
+/* burger */
+.burger {
+display: none;
+flex-direction: column; justify-content: center; align-items: center;
+gap: 5px; width: 44px; height: 44px;
+background: none; border: none; cursor: pointer;
+flex-shrink: 0;
+}
+.burger span {
+display: block; width: 22px; height: 2px;
+background: rgba(255,255,255,.8); border-radius: 2px;
+transition: all .3s;
+}
+.burger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+.burger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.burger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+/* mobile menu */
+.mob-menu {
+display: none; position: fixed; inset: 0; top: 68px;
+background: rgba(5,10,10,.98); backdrop-filter: blur(20px);
+z-index: 490; flex-direction: column; padding: 20px 24px 40px;
+gap: 0; overflow-y: auto;
+}
+.mob-menu.open { display: flex; }
+.mob-menu a {
+font-size: 1.3rem; font-weight: 800; text-transform: uppercase;
+letter-spacing: 2px; color: rgba(255,255,255,.45);
+padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,.05);
+display: flex; align-items: center; justify-content: space-between;
+min-height: 68px; transition: color .2s;
+}
+.mob-menu a:last-child {
+border: none; margin-top: 14px;
+background: var(–teal); color: #fff !important;
+border-radius: 14px; padding: 20px 24px;
+justify-content: center; font-size: 1.1rem;
+box-shadow: 0 6px 24px rgba(88,176,179,.35);
+}
+.mob-menu a:active { color: #fff; }
+
+/* ─── HERO ─── */
+.hero {
+position: relative;
+height: 100svh; min-height: 580px; max-height: 860px;
+display: flex; align-items: flex-end; overflow: hidden;
+}
+.hero-slides { position: absolute; inset: 0; }
+.hslide {
+position: absolute; inset: 0;
+background-size: cover; background-position: center;
+opacity: 0;
+transition: opacity 1.8s ease, transform 8s cubic-bezier(.16,1,.3,1);
+transform: scale(1.06);
+}
+.hslide.on { opacity: 1; transform: scale(1); }
+.s1 { background-image: url(‘IMG_8505.png’); }
+.s2 { background-image: url(‘IMG_8506.png’); background-position: center 30%; }
+.s3 { background-image: url(‘IMG_3636.png’); }
+.s4 { background-image: url(‘IMG_3637.png’); }
+.hero-dim {
+position: absolute; inset: 0; z-index: 1;
+background: linear-gradient(
+to bottom,
+rgba(5,10,10,.3) 0%,
+rgba(5,10,10,.15) 30%,
+rgba(5,10,10,.75) 85%,
+rgba(5,10,10,.95) 100%
+);
+}
+.hero-body {
+position: relative; z-index: 2;
+padding: 0 24px 56px; width: 100%;
+}
+.hero-badge {
+display: inline-flex; align-items: center; gap: 8px;
+background: rgba(88,176,179,.12); border: 1px solid rgba(88,176,179,.35);
+padding: 6px 14px; border-radius: 100px; margin-bottom: 16px;
+opacity: 0; animation: up .6s .1s forwards;
+}
+.hero-badge .dot {
+width: 6px; height: 6px; background: var(–teal);
+border-radius: 50%; animation: pulse 2s infinite;
+}
+.hero-badge span {
+font-size: .65rem; letter-spacing: 2.5px; text-transform: uppercase;
+color: var(–teal); font-weight: 700;
+}
+.hero-h1 {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(2.6rem, 8.5vw, 6rem);
+color: #fff; line-height: .95; margin-bottom: 20px;
+opacity: 0; animation: up .8s .25s forwards;
+}
+.hero-h1 em { font-style: italic; color: var(–teal); }
+.hero-sub {
+font-size: .95rem; color: rgba(255,255,255,.6);
+line-height: 1.65; max-width: 380px; margin-bottom: 28px;
+opacity: 0; animation: up .6s .45s forwards;
+}
+.hero-btns {
+display: flex; gap: 12px;
+opacity: 0; animation: up .6s .6s forwards;
+}
+.btn-main {
+flex: 1; min-width: 0;
+background: var(–teal); color: #fff;
+padding: 16px 20px; border-radius: 12px;
+font-weight: 800; font-size: .95rem;
+display: flex; align-items: center; justify-content: center; gap: 8px;
+min-height: 54px;
+box-shadow: 0 8px 24px rgba(88,176,179,.35);
+transition: background .2s, transform .15s;
+touch-action: manipulation;
+}
+.btn-main:active { background: var(–teal-dark); transform: scale(.97); }
+.btn-sec {
+flex: 1; min-width: 0;
+background: rgba(255,255,255,.08); color: #fff;
+padding: 16px 16px; border-radius: 12px;
+font-weight: 700; font-size: .95rem;
+display: flex; align-items: center; justify-content: center; gap: 8px;
+min-height: 54px; border: 1px solid rgba(255,255,255,.2);
+touch-action: manipulation; transition: background .2s;
+}
+.btn-sec:active { background: rgba(255,255,255,.15); }
+
+/* hero dots */
+.hdots {
+position: absolute; right: 18px; bottom: 56px; z-index: 2;
+display: flex; flex-direction: column; gap: 6px;
+}
+.hdot {
+width: 3px; height: 16px; border-radius: 2px;
+background: rgba(255,255,255,.2); border: none;
+cursor: pointer; transition: all .4s; padding: 0;
+}
+.hdot.on { height: 40px; background: var(–teal); }
+
+/* ─── TICKER ─── */
+.ticker {
+background: var(–teal-xdark); overflow: hidden; padding: 10px 0;
+}
+.ticker-inner {
+display: inline-flex; white-space: nowrap;
+animation: ticker 26s linear infinite;
+}
+.tick {
+display: inline-flex; align-items: center; gap: 14px;
+padding: 0 24px; font-size: .68rem; font-weight: 700;
+letter-spacing: 2px; text-transform: uppercase;
+color: rgba(255,255,255,.8);
+}
+.tick-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,.35); flex-shrink: 0; }
+
+/* ─── INFO STRIP ─── */
+.istrip {
+background: var(–dark1);
+border-bottom: 1px solid var(–line);
+}
+.istrip-in {
+max-width: 1200px; margin: 0 auto;
+padding: 0 24px;
+display: flex; flex-wrap: wrap;
+}
+.ii {
+display: flex; align-items: center; gap: 10px;
+padding: 15px 24px 15px 0; margin-right: 24px;
+border-right: 1px solid var(–line); flex-shrink: 0;
+}
+.ii:last-child { border-right: none; margin-right: 0; }
+.ii-icon {
+width: 34px; height: 34px; border-radius: 8px;
+background: rgba(88,176,179,.1);
+display: flex; align-items: center; justify-content: center;
+flex-shrink: 0;
+}
+.ii-icon svg { color: var(–teal); }
+.ii-text { display: flex; flex-direction: column; gap: 1px; }
+.ii-label { font-size: .55rem; letter-spacing: 2px; text-transform: uppercase; color: var(–muted); }
+.ii-val { font-size: .82rem; font-weight: 600; color: var(–text); }
+
+/* ─── SECTION BASE ─── */
+.section { padding: 72px 0; }
+.section.alt { background: var(–dark1); }
+.wrap { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+.eyebrow {
+font-size: .6rem; letter-spacing: 4px; text-transform: uppercase;
+color: var(–teal); font-weight: 700; margin-bottom: 10px;
+display: flex; align-items: center; gap: 10px;
+}
+.eyebrow::before {
+content: ‘’; width: 16px; height: 2px;
+background: var(–teal); border-radius: 1px; flex-shrink: 0;
+}
+.sec-title {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(2rem, 5vw, 3.4rem);
+color: #fff; line-height: 1; margin-bottom: 40px;
+}
+.sec-title em { font-style: italic; color: var(–teal); }
+
+/* ─── SERVICES ─── */
+.srv-intro {
+display: flex; align-items: flex-end;
+justify-content: space-between; gap: 20px;
+margin-bottom: 36px; flex-wrap: wrap;
+}
+.srv-desc { font-size: .9rem; color: var(–muted); line-height: 1.7; max-width: 280px; }
+.srv-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 14px;
+}
+.sc {
+background: var(–dark2);
+border: 1px solid var(–line);
+border-radius: 16px; overflow: hidden;
+transition: transform .3s, border-color .3s, box-shadow .3s;
+}
+.sc:hover {
+transform: translateY(-5px);
+border-color: rgba(88,176,179,.35);
+box-shadow: 0 16px 40px rgba(0,0,0,.4);
+}
+/* IMAGE WRAPPER - always shows something */
+.sc-img-wrap {
+width: 100%;
+height: 180px;
+overflow: hidden;
+background: var(–dark3);
+flex-shrink: 0;
+position: relative;
+}
+.sc-img-wrap img {
+width: 100%; height: 100%;
+object-fit: cover;
+display: block;
+transition: transform .55s;
+}
+.sc:hover .sc-img-wrap img { transform: scale(1.05); }
+.sc-body { padding: 18px 18px 20px; }
+.sc-num { font-size: .58rem; letter-spacing: 3px; color: var(–teal); font-weight: 700; margin-bottom: 6px; }
+.sc-name {
+font-size: clamp(.9rem, 1.8vw, 1rem);
+font-weight: 800; text-transform: uppercase;
+letter-spacing: .5px; color: #fff; margin-bottom: 5px;
+}
+.sc-txt { font-size: .8rem; color: var(–muted); line-height: 1.6; }
+
+/* ─── STATS ─── */
+.stats { background: var(–teal-xdark); padding: 0; }
+.stats-row {
+display: grid; grid-template-columns: repeat(4, 1fr);
+gap: 1px; background: rgba(255,255,255,.1);
+}
+.stat {
+padding: 40px 20px; background: var(–teal-xdark);
+text-align: center;
+}
+.stat-n {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(2.2rem, 5vw, 3.2rem);
+color: #fff; line-height: 1; margin-bottom: 6px;
+}
+.stat-n b { color: #7de8eb; font-style: italic; }
+.stat-l {
+font-size: .63rem; letter-spacing: 2px;
+text-transform: uppercase; color: rgba(255,255,255,.55); font-weight: 700;
+}
+
+/* ─── GALLERY ─── */
+/* Works on all screens — simple stack */
+.gal-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+grid-template-rows: auto;
+gap: 8px;
+}
+.gal-big { grid-column: span 2; }
+.gi {
+position: relative; overflow: hidden; border-radius: 12px;
+background: var(–dark3);
+}
+/* All gallery items: explicit height */
+.gal-big { height: clamp(220px, 40vw, 380px); }
+.gi:not(.gal-big) { height: clamp(160px, 28vw, 260px); }
+.gi img, .gi video {
+width: 100%; height: 100%;
+object-fit: cover; display: block;
+transition: transform .6s;
+}
+.gi:hover img, .gi:hover video { transform: scale(1.04); }
+.gi-ov {
+position: absolute; inset: 0;
+background: linear-gradient(0deg, rgba(5,10,10,.65) 0%, transparent 50%);
+display: flex; align-items: flex-end; padding: 14px;
+pointer-events: none;
+}
+.gi-lbl {
+font-size: .65rem; letter-spacing: 2px;
+text-transform: uppercase; color: rgba(255,255,255,.75);
+font-weight: 700;
+}
+
+/* ─── EQUIPMENT ─── */
+.equip-in {
+display: grid; grid-template-columns: 1fr 1fr;
+gap: 52px; align-items: center;
+}
+.equip-imgs {
+display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+}
+.equip-imgs .img-wrap {
+border-radius: 12px; overflow: hidden;
+background: var(–dark3);
+}
+.equip-imgs .img-wrap:first-child {
+grid-column: span 2;
+height: clamp(180px, 22vw, 260px);
+}
+.equip-imgs .img-wrap:not(:first-child) {
+height: clamp(130px, 15vw, 180px);
+}
+.equip-imgs .img-wrap img {
+width: 100%; height: 100%;
+object-fit: cover; display: block;
+transition: transform .5s;
+}
+.equip-imgs .img-wrap:hover img { transform: scale(1.03); }
+.equip-txt { font-size: .92rem; color: var(–muted); line-height: 1.8; margin-bottom: 24px; }
+.tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag {
+background: rgba(88,176,179,.08);
+border: 1px solid rgba(88,176,179,.25);
+color: var(–teal); padding: 7px 16px;
+border-radius: 100px; font-size: .76rem; font-weight: 600;
+transition: all .2s;
+}
+.tag:hover { background: var(–teal); color: #fff; border-color: var(–teal); }
+
+/* ─── TESTIMONIALS ─── */
+.testi-grid {
+display: grid; grid-template-columns: repeat(3,1fr); gap: 14px;
+}
+.tc {
+background: var(–dark2); border: 1px solid var(–line);
+border-radius: 16px; padding: 24px 20px;
+transition: border-color .3s, transform .3s;
+}
+.tc:hover { border-color: rgba(88,176,179,.3); transform: translateY(-4px); }
+.tc-stars { display: flex; gap: 3px; margin-bottom: 14px; }
+.tc-stars svg { width: 14px; height: 14px; fill: #c9a96e; color: #c9a96e; }
+.tc-q { font-size: .86rem; color: var(–muted); line-height: 1.7; margin-bottom: 18px; font-style: italic; }
+.tc-author { display: flex; align-items: center; gap: 10px; }
+.tc-av {
+width: 36px; height: 36px; border-radius: 50%;
+background: linear-gradient(135deg, var(–teal-xdark), var(–teal));
+display: flex; align-items: center; justify-content: center;
+font-weight: 800; font-size: .86rem; color: #fff; flex-shrink: 0;
+}
+.tc-name { font-size: .84rem; font-weight: 700; color: #fff; }
+.tc-loc { font-size: .72rem; color: var(–muted); }
+
+/* ─── LOCATION ─── */
+.loc-in {
+display: grid; grid-template-columns: 1fr 1.5fr;
+gap: 52px; align-items: start;
+}
+.cr {
+display: flex; gap: 14px; align-items: flex-start;
+padding: 16px 0; border-bottom: 1px solid var(–line);
+}
+.cr:last-of-type { border-bottom: none; }
+.cr-icon {
+width: 40px; height: 40px; border-radius: 10px;
+background: rgba(88,176,179,.1);
+display: flex; align-items: center; justify-content: center;
+flex-shrink: 0;
+}
+.cr-icon svg { color: var(–teal); }
+.cr-lbl { font-size: .56rem; letter-spacing: 2px; text-transform: uppercase; color: var(–muted); margin-bottom: 3px; }
+.cr-val { font-size: .9rem; font-weight: 600; color: var(–text); line-height: 1.5; }
+.cr-val a { color: var(–text); transition: color .2s; }
+.cr-val a:hover { color: var(–teal); }
+.cr-val small { font-weight: 400; font-size: .8rem; color: var(–muted); }
+.map-box {
+border-radius: 16px; overflow: hidden;
+border: 1px solid var(–line);
+box-shadow: 0 12px 40px rgba(0,0,0,.5);
+}
+.map-box iframe {
+width: 100%; height: clamp(300px, 38vw, 440px);
+border: none; display: block; filter: brightness(.85) saturate(.5);
+}
+
+/* ─── CTA ─── */
+.cta-section {
+background: var(–teal-xdark); padding: 72px 24px;
+text-align: center; position: relative; overflow: hidden;
+}
+.cta-section::before {
+content: ‘’;
+position: absolute; top: -40%; right: -10%;
+width: 60%; height: 180%;
+background: radial-gradient(ellipse, rgba(88,176,179,.15), transparent 70%);
+pointer-events: none;
+}
+.cta-h {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(1.9rem, 5.5vw, 3.6rem);
+color: #fff; line-height: 1.05; margin-bottom: 14px;
+position: relative;
+}
+.cta-h em { font-style: italic; color: #b2eff1; }
+.cta-sub {
+font-size: .95rem; color: rgba(255,255,255,.65);
+margin-bottom: 32px; max-width: 400px;
+margin-left: auto; margin-right: auto; line-height: 1.7;
+position: relative;
+}
+.cta-btns {
+display: flex; gap: 12px; justify-content: center;
+flex-wrap: wrap; position: relative;
+}
+.btn-cw {
+background: #fff; color: var(–teal-xdark);
+padding: 16px 32px; border-radius: 12px;
+font-weight: 800; font-size: .95rem;
+display: flex; align-items: center; gap: 9px;
+min-height: 52px; min-width: 160px; justify-content: center;
+box-shadow: 0 6px 20px rgba(0,0,0,.2);
+transition: transform .15s; touch-action: manipulation;
+}
+.btn-cw:active { transform: scale(.97); }
+.btn-co {
+background: transparent; color: #fff;
+padding: 16px 28px; border-radius: 12px;
+border: 2px solid rgba(255,255,255,.4);
+font-weight: 700; font-size: .95rem;
+display: flex; align-items: center; gap: 9px;
+min-height: 52px; min-width: 160px; justify-content: center;
+touch-action: manipulation; transition: border-color .2s, background .2s;
+}
+.btn-co:active { border-color: #fff; background: rgba(255,255,255,.1); }
+
+/* ─── FOOTER ─── */
+footer {
+background: var(–dark1);
+border-top: 1px solid var(–line);
+padding: 52px 24px 20px;
+}
+.ft-in { max-width: 1200px; margin: 0 auto; }
+.ft-top {
+display: grid; grid-template-columns: 1.4fr 1fr 1fr;
+gap: 40px; padding-bottom: 36px;
+border-bottom: 1px solid var(–line);
+}
+.ft-brand .ft-name { font-size: 1.3rem; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 8px; }
+.ft-brand .ft-name span { color: var(–teal); }
+.ft-brand p { font-size: .78rem; color: var(–muted); line-height: 1.7; max-width: 200px; margin-bottom: 16px; }
+.ft-soc { display: flex; gap: 8px; }
+.fsb {
+width: 38px; height: 38px; border-radius: 9px;
+background: rgba(255,255,255,.04); border: 1px solid var(–line);
+display: flex; align-items: center; justify-content: center;
+color: var(–muted); transition: all .2s; min-width: 38px;
+}
+.fsb:hover { background: var(–teal); color: #fff; border-color: var(–teal); }
+.ft-col h4 { font-size: .56rem; letter-spacing: 3px; text-transform: uppercase; color: var(–teal); margin-bottom: 14px; font-weight: 700; }
+.ft-col ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.ft-col ul li a { font-size: .82rem; color: var(–muted); transition: color .2s; display: block; padding: 2px 0; }
+.ft-col ul li a:hover { color: #fff; }
+.ft-bot {
+display: flex; justify-content: space-between; align-items: center;
+padding-top: 16px; flex-wrap: wrap; gap: 8px;
+}
+.ft-bot span { font-size: .68rem; color: rgba(255,255,255,.15); }
+
+/* ─── ANIMATIONS ─── */
+@keyframes up { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:none; } }
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.3;} }
+@keyframes ticker { from{transform:translateX(0);} to{transform:translateX(-50%);} }
+.rv { opacity:0; transform:translateY(28px); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+.rl { opacity:0; transform:translateX(-28px); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+.rr { opacity:0; transform:translateX(28px); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+.rv.in, .rl.in, .rr.in { opacity:1; transform:none; }
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}.d5{transition-delay:.4s}
+
+/* ════════════════════════════
+TABLET  769-1024px
+════════════════════════════ */
+@media(max-width:1024px){
+.equip-in { grid-template-columns:1fr; gap:36px; }
+.loc-in { grid-template-columns:1fr; gap:36px; }
+.testi-grid { grid-template-columns:1fr 1fr; }
+.ft-top { grid-template-columns:1fr 1fr; }
+}
+
+/* ════════════════════════════
+MOBILE  ≤ 768px
+════════════════════════════ */
+@media(max-width:768px){
 /* header */
-header{position:fixed;top:0;left:0;right:0;z-index:200;height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(18px,5vw,52px);background:rgba(255,255,255,.93);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid transparent;transition:border-color .3s,box-shadow .3s}
-header.scrolled{border-color:var(–border);box-shadow:0 2px 20px rgba(0,0,0,.07)}
-.logo{display:flex;align-items:center;gap:10px}
-.logo-img{height:38px;width:auto;flex-shrink:0}
-.logo-div{width:1px;height:28px;background:linear-gradient(180deg,transparent,var(–teal2),transparent)}
-.logo-nm{font-family:‘Syne’,sans-serif;font-size:1.35rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;line-height:1;display:block}
-.logo-nm .c1{color:var(–ink)}
-.logo-nm .c2{color:var(–teal)}
-.logo-sb{font-size:.42rem;letter-spacing:3px;text-transform:uppercase;color:var(–muted);font-weight:600;display:block;margin-top:2px}
-.desk-nav{display:flex;align-items:center;gap:2px}
-.desk-nav a{font-size:.7rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(–muted);padding:9px 15px;border-radius:100px;transition:color .2s,background .2s;white-space:nowrap}
-.desk-nav a:hover{color:var(–ink);background:var(–bg2)}
-.desk-nav .dnav-btn{background:var(–teal);color:#fff!important;padding:10px 22px;border-radius:100px;font-weight:700;box-shadow:0 4px 16px rgba(61,158,161,.3);transition:background .2s,transform .15s}
-.desk-nav .dnav-btn:hover{background:var(–teal3);transform:translateY(-1px)}
-.burger{display:none;flex-direction:column;gap:5px;padding:10px;border:none;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;min-width:44px;min-height:44px;align-items:center;justify-content:center}
-.burger span{display:block;width:22px;height:2px;background:var(–ink);border-radius:2px;transition:all .3s}
-.burger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
-.burger.open span:nth-child(2){opacity:0}
-.burger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
-.mob-nav{display:none;position:fixed;inset:0;top:70px;background:rgba(255,255,255,.98);backdrop-filter:blur(20px);z-index:190;flex-direction:column;padding:16px 24px 40px}
-.mob-nav.open{display:flex}
-.mob-nav a{font-family:‘Syne’,sans-serif;font-size:1.4rem;font-weight:700;color:var(–ink2);padding:18px 0;border-bottom:1px solid var(–border);display:flex;align-items:center;justify-content:space-between;min-height:62px;transition:color .2s}
-.mob-nav a:active{color:var(–teal)}
-.mob-nav a:last-child{border:none;margin-top:10px;background:var(–teal);color:#fff!important;border-radius:16px;padding:18px 24px;justify-content:center;font-size:1.05rem;letter-spacing:1px;min-height:60px}
+.desk-links { display:none; }
+.burger { display:flex; }
 
 /* hero */
-.hero{position:relative;height:100svh;min-height:580px;max-height:900px;overflow:hidden;display:flex;align-items:flex-end}
-.hero-slides{position:absolute;inset:0}
-.hslide{position:absolute;inset:0;opacity:0;background-size:cover;background-position:center;transition:opacity 1.8s ease,transform 8s cubic-bezier(.16,1,.3,1);transform:scale(1.05)}
-.hslide.active{opacity:1;transform:scale(1)}
-.hs1{background-image:url(‘IMG_8505.png’)}
-.hs2{background-image:url(‘IMG_8506.png’);background-position:center 30%}
-.hs3{background-image:url(‘IMG_3636.png’)}
-.hs4{background-image:url(‘IMG_3637.png’)}
-.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.15) 0%,rgba(0,0,0,.1) 35%,rgba(0,0,0,.72) 100%);z-index:1}
-.hero-content{position:relative;z-index:2;padding:clamp(24px,6vw,64px);padding-bottom:clamp(52px,9vw,84px);width:100%;max-width:820px}
-.hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(8px);padding:7px 16px;border-radius:100px;margin-bottom:18px;opacity:0;animation:fadeUp .6s .15s forwards}
-.hero-tag .pulse{width:7px;height:7px;background:#7de8eb;border-radius:50%;animation:blink 2s infinite;flex-shrink:0}
-.hero-tag span{font-size:.68rem;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.92);font-weight:600}
-.hero-h1{font-family:‘DM Serif Display’,serif;font-size:clamp(2.8rem,9vw,6.5rem);color:#fff;line-height:.95;margin-bottom:18px;opacity:0;animation:fadeUp .8s .3s forwards}
-.hero-h1 em{font-style:italic;color:#7de8eb}
-.hero-sub{font-size:clamp(.95rem,2.5vw,1.1rem);color:rgba(255,255,255,.75);line-height:1.65;max-width:400px;margin-bottom:28px;opacity:0;animation:fadeUp .6s .5s forwards}
-.hero-btns{display:flex;gap:12px;flex-wrap:wrap;opacity:0;animation:fadeUp .6s .65s forwards}
-.btn-hp{background:var(–teal);color:#fff;padding:16px 28px;border-radius:14px;font-weight:700;font-size:clamp(.95rem,3vw,1rem);display:inline-flex;align-items:center;gap:10px;box-shadow:0 6px 20px rgba(61,158,161,.4);min-height:54px;touch-action:manipulation;transition:transform .15s,box-shadow .2s;flex:1;justify-content:center;min-width:160px}
-.btn-hp:active{transform:scale(.97)}
-.btn-hg{background:rgba(255,255,255,.13);color:#fff;padding:16px 24px;border-radius:14px;border:1.5px solid rgba(255,255,255,.5);font-weight:600;font-size:clamp(.95rem,3vw,1rem);display:inline-flex;align-items:center;gap:8px;backdrop-filter:blur(6px);min-height:54px;touch-action:manipulation;transition:background .2s;flex:1;justify-content:center;min-width:140px}
-.btn-hg:active{background:rgba(255,255,255,.22)}
-.hdots{position:absolute;right:clamp(18px,4vw,36px);bottom:clamp(52px,9vw,84px);z-index:2;display:flex;flex-direction:column;gap:6px;align-items:center}
-.hdot{width:3px;height:16px;border-radius:2px;background:rgba(255,255,255,.25);border:none;cursor:pointer;transition:all .4s;padding:0}
-.hdot.active{height:42px;background:#7de8eb}
-
-/* ticker */
-.ticker-wrap{background:var(–teal3);overflow:hidden;padding:10px 0}
-.ticker-track{display:inline-flex;white-space:nowrap;animation:ticker 28s linear infinite}
-.tick-i{display:inline-flex;align-items:center;gap:14px;padding:0 22px;font-size:.7rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.85)}
-.tick-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.35);flex-shrink:0}
+.hero-sub { display:none; }
+.hero-btns { flex-direction:column; }
+.btn-main, .btn-sec { flex:none; width:100%; min-width:0; }
 
 /* info strip */
-.istrip{background:var(–bg2);border-bottom:1px solid var(–border)}
-.istrip-in{max-width:1200px;margin:0 auto;padding:0 clamp(18px,5vw,52px);display:flex;flex-wrap:wrap}
-.ii{display:flex;align-items:center;gap:10px;padding:15px 22px 15px 0;margin-right:22px;border-right:1px solid var(–border);flex-shrink:0}
-.ii:last-child{border-right:none;margin-right:0}
-.ii svg{color:var(–teal);flex-shrink:0}
-.ii span{font-size:.84rem;color:var(–muted)}
-.ii strong{color:var(–ink)}
+.istrip-in { flex-direction:column; }
+.ii { border-right:none; border-bottom:1px solid var(–line); padding:13px 0; margin-right:0; width:100%; }
+.ii:last-child { border-bottom:none; }
 
-/* shared */
-.wrap{max-width:1200px;margin:0 auto;padding:0 clamp(18px,5vw,52px)}
-.eyebrow{font-size:.63rem;letter-spacing:4px;text-transform:uppercase;color:var(–teal3);font-weight:700;display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.eyebrow::before{content:’’;width:18px;height:2px;background:var(–teal2);border-radius:1px;flex-shrink:0}
-.sec-h{font-family:‘DM Serif Display’,serif;font-size:clamp(2.2rem,5.5vw,3.8rem);line-height:1;color:var(–ink);margin-bottom:14px}
-.sec-h em{font-style:italic;color:var(–teal)}
-.sec-h.wh{color:#fff}
-.sec-h.wh em{color:#b2eff1}
+/* services — 1 col portrait, 2 col landscape */
+.srv-intro { flex-direction:column; align-items:flex-start; }
+.srv-desc { max-width:100%; }
+.srv-grid { grid-template-columns:1fr; gap:12px; }
+.sc-img-wrap { height:200px; }
 
-/* services */
-.services{padding:clamp(60px,10vw,112px) 0;background:#fff}
-.srv-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:clamp(36px,6vw,56px);flex-wrap:wrap}
-.srv-desc{font-size:.96rem;color:var(–muted);line-height:1.7;max-width:280px}
-.srv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,2vw,18px)}
-.scard{background:var(–bg2);border-radius:clamp(14px,2.5vw,22px);border:1px solid var(–border);overflow:hidden;transition:transform .3s,box-shadow .3s}
-.scard:hover{transform:translateY(-5px);box-shadow:0 18px 44px rgba(61,158,161,.12)}
-.scard-img{width:100%;height:clamp(150px,18vw,195px);object-fit:cover;transition:transform .55s}
-.scard:hover .scard-img{transform:scale(1.04)}
-.scard-body{padding:clamp(16px,2.5vw,22px)}
-.scard-num{font-size:.6rem;letter-spacing:3px;color:var(–teal2);font-weight:700;margin-bottom:6px;text-transform:uppercase}
-.scard-name{font-family:‘Syne’,sans-serif;font-size:clamp(.95rem,2vw,1.05rem);font-weight:700;color:var(–ink);margin-bottom:5px;letter-spacing:.3px}
-.scard-txt{font-size:.84rem;color:var(–muted);line-height:1.6}
+/* stats 2×2 */
+.stats-row { grid-template-columns:1fr 1fr; }
 
-/* stats */
-.stats{background:var(–teal3);padding:clamp(44px,7vw,76px) 0}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.12)}
-.stat{padding:clamp(24px,4vw,44px) 16px;background:var(–teal3);text-align:center}
-.stat-n{font-family:‘DM Serif Display’,serif;font-size:clamp(2.2rem,5vw,3.5rem);color:#fff;line-height:1;margin-bottom:6px}
-.stat-n span{color:#7de8eb}
-.stat-l{font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.6);font-weight:600}
+/* gallery — big takes full width, rest 2 col */
+.gal-big { height: clamp(200px, 50vw, 300px); }
+.gi:not(.gal-big) { height: clamp(140px, 32vw, 210px); }
 
-/* gallery */
-.gallery{padding:clamp(60px,10vw,112px) 0;background:var(–bg2)}
-.gal-head{margin-bottom:clamp(32px,5vw,52px)}
-.gal-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;grid-template-rows:clamp(200px,25vw,290px) clamp(160px,20vw,220px);gap:8px}
-.gi{position:relative;overflow:hidden;border-radius:14px;background:var(–teal-pale)}
-.gi-big{grid-row:span 2}
-.gi img,.gi video{width:100%;height:100%;object-fit:cover;transition:transform .65s;display:block}
-.gi:hover img,.gi:hover video{transform:scale(1.05)}
-.gi-ov{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.48) 0%,transparent 50%);display:flex;align-items:flex-end;padding:14px;pointer-events:none}
-.gi-label{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.85);font-weight:600}
+/* equip */
+.equip-imgs .img-wrap:first-child { height:200px; }
+.equip-imgs .img-wrap:not(:first-child) { height:150px; }
 
-/* equipment */
-.equipment{padding:clamp(60px,10vw,112px) 0;background:#fff}
-.equip-in{display:grid;grid-template-columns:1fr 1fr;gap:clamp(36px,7vw,76px);align-items:center}
-.equip-imgs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.equip-imgs img{border-radius:14px;width:100%;height:clamp(130px,15vw,190px);object-fit:cover;transition:transform .45s;filter:saturate(.85)}
-.equip-imgs img:first-child{grid-column:span 2;height:clamp(170px,20vw,250px)}
-.equip-imgs img:hover{transform:scale(1.02);filter:saturate(1.1)}
-.equip-txt{font-size:.96rem;color:var(–muted);line-height:1.78;margin-bottom:26px}
-.etags{display:flex;flex-wrap:wrap;gap:8px}
-.etag{background:var(–teal-pale);border:1px solid var(–teal-pale2);color:var(–teal3);padding:8px 18px;border-radius:100px;font-size:.8rem;font-weight:600;transition:all .2s}
-.etag:hover{background:var(–teal2);color:#fff;border-color:var(–teal2)}
-
-/* testimonials */
-.testi{padding:clamp(60px,10vw,96px) 0;background:var(–bg2)}
-.testi-head{text-align:center;margin-bottom:clamp(32px,5vw,52px)}
-.testi-head .eyebrow{justify-content:center}
-.testi-head .eyebrow::before{display:none}
-.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,2vw,18px)}
-.tcard{background:#fff;border:1px solid var(–border);border-radius:20px;padding:clamp(20px,3.5vw,30px);transition:transform .3s,box-shadow .3s}
-.tcard:hover{transform:translateY(-4px);box-shadow:0 16px 44px rgba(61,158,161,.1)}
-.tstars{display:flex;gap:3px;margin-bottom:14px}
-.tstars svg{width:14px;height:14px;fill:var(–gold);color:var(–gold)}
-.tquote{font-size:.9rem;color:var(–muted);line-height:1.72;margin-bottom:18px;font-style:italic}
-.tauthor{display:flex;align-items:center;gap:10px}
-.tavatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(–teal3),var(–teal2));display:flex;align-items:center;justify-content:center;font-family:‘Syne’,sans-serif;font-weight:700;font-size:.86rem;color:#fff;flex-shrink:0}
-.tname{font-family:‘Syne’,sans-serif;font-weight:700;font-size:.84rem;color:var(–ink)}
-.tloc{font-size:.72rem;color:var(–muted);margin-top:1px}
-
-/* location */
-.location{padding:clamp(60px,10vw,112px) 0;background:#fff}
-.loc-in{display:grid;grid-template-columns:1fr 1.5fr;gap:clamp(36px,7vw,68px);align-items:start}
-.cr{display:flex;gap:14px;align-items:flex-start;padding:17px 0;border-bottom:1px solid var(–border)}
-.cr:last-of-type{border-bottom:none}
-.cr-icon{width:42px;height:42px;background:var(–teal-pale);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.cr-icon svg{color:var(–teal)}
-.cr-label{font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:var(–muted);margin-bottom:3px}
-.cr-val{font-size:.94rem;font-weight:500;color:var(–ink);line-height:1.5}
-.cr-val a{color:var(–ink);transition:color .2s}
-.cr-val a:hover{color:var(–teal)}
-.cr-val small{font-weight:400;font-size:.82rem;color:var(–muted)}
-.map-wrap{border-radius:20px;overflow:hidden;border:1px solid var(–border);box-shadow:0 12px 40px rgba(0,0,0,.06)}
-.map-wrap iframe{width:100%;height:clamp(300px,38vw,450px);border:none;display:block}
+/* testi */
+.testi-grid { grid-template-columns:1fr; }
 
 /* cta */
-.cta{padding:clamp(60px,10vw,96px) clamp(18px,5vw,52px);background:var(–teal);text-align:center;position:relative;overflow:hidden}
-.cta::before{content:’’;position:absolute;top:-50%;right:-15%;width:70%;height:180%;background:radial-gradient(ellipse,rgba(255,255,255,.09),transparent 65%);pointer-events:none}
-.cta-h{font-family:‘DM Serif Display’,serif;font-size:clamp(2rem,6vw,3.8rem);color:#fff;line-height:1;margin-bottom:14px;position:relative}
-.cta-h em{font-style:italic;color:#b2eff1}
-.cta-sub{font-size:clamp(.94rem,2vw,1.05rem);color:rgba(255,255,255,.75);margin-bottom:32px;max-width:420px;margin-left:auto;margin-right:auto;line-height:1.7;position:relative}
-.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative}
-.btn-cw{background:#fff;color:var(–teal3);padding:16px 32px;border-radius:14px;font-weight:700;font-size:clamp(.95rem,2.5vw,1rem);display:inline-flex;align-items:center;gap:10px;min-height:54px;box-shadow:0 6px 20px rgba(0,0,0,.13);transition:transform .15s,box-shadow .2s;touch-action:manipulation}
-.btn-cw:active{transform:scale(.97)}
-.btn-co{background:transparent;color:#fff;padding:16px 28px;border-radius:14px;border:2px solid rgba(255,255,255,.5);font-weight:600;font-size:clamp(.95rem,2.5vw,1rem);display:inline-flex;align-items:center;gap:8px;min-height:54px;transition:border-color .2s,background .2s;touch-action:manipulation}
-.btn-co:active{background:rgba(255,255,255,.12)}
+.cta-btns { flex-direction:column; align-items:stretch; max-width:360px; margin-left:auto; margin-right:auto; }
+.btn-cw, .btn-co { width:100%; }
 
 /* footer */
-footer{background:var(–ink);padding:clamp(44px,8vw,68px) clamp(18px,5vw,52px) clamp(18px,3.5vw,24px)}
-.ft-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:clamp(24px,5vw,52px);padding-bottom:clamp(28px,5vw,44px);border-bottom:1px solid rgba(255,255,255,.07)}
-.ft-brand .ft-ln{font-family:‘Syne’,sans-serif;font-size:1.45rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;display:block}
-.ft-brand .ft-ln .c1{color:#fff}
-.ft-brand .ft-ln .c2{color:var(–teal2)}
-.ft-brand p{font-size:.82rem;color:rgba(255,255,255,.28);line-height:1.7;max-width:210px;margin-bottom:18px}
-.ft-socials{display:flex;gap:8px}
-.fsoc{width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.35);transition:all .2s;min-width:40px;min-height:40px}
-.fsoc:hover{background:var(–teal);color:#fff;border-color:var(–teal)}
-.ft-col h4{font-size:.58rem;letter-spacing:3px;text-transform:uppercase;color:var(–teal2);margin-bottom:14px;font-weight:700}
-.ft-col ul{list-style:none;display:flex;flex-direction:column;gap:7px}
-.ft-col ul li a{font-size:.84rem;color:rgba(255,255,255,.3);transition:color .2s;display:block;padding:2px 0}
-.ft-col ul li a:hover{color:#fff}
-.ft-bot{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding-top:18px;flex-wrap:wrap;gap:8px}
-.ft-bot span{font-size:.7rem;color:rgba(255,255,255,.18)}
-
-/* animations */
-@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
-@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.rv{opacity:0;transform:translateY(28px);transition:opacity .75s cubic-bezier(.16,1,.3,1),transform .75s cubic-bezier(.16,1,.3,1)}
-.rl{opacity:0;transform:translateX(-28px);transition:opacity .75s cubic-bezier(.16,1,.3,1),transform .75s cubic-bezier(.16,1,.3,1)}
-.rr{opacity:0;transform:translateX(28px);transition:opacity .75s cubic-bezier(.16,1,.3,1),transform .75s cubic-bezier(.16,1,.3,1)}
-.rv.vis,.rl.vis,.rr.vis{opacity:1;transform:none}
-.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}.d5{transition-delay:.5s}
-
-/* ═══ MOBILE ≤ 768px ═══ */
-@media(max-width:768px){
-.desk-nav{display:none}
-.burger{display:flex}
-/* hero buttons stacked */
-.hero-btns{flex-direction:column}
-.btn-hp,.btn-hg{flex:none;width:100%;min-width:0}
-.hero-sub{display:none}
-/* info strip vertical */
-.istrip-in{flex-direction:column}
-.ii{border-right:none;border-bottom:1px solid var(–border);padding:13px 0;margin-right:0;width:100%}
-.ii:last-child{border-bottom:none}
-/* services 1 col on small, 2 on medium */
-.srv-grid{grid-template-columns:1fr}
-.srv-head{flex-direction:column;align-items:flex-start}
-.srv-desc{max-width:100%}
-/* stats 2x2 */
-.stats-grid{grid-template-columns:1fr 1fr}
-/* gallery simplified */
-.gal-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto}
-.gi-big{grid-row:auto;height:200px}
-.gi{height:180px}
-/* equip single col */
-.equip-in{grid-template-columns:1fr}
-/* testi single col */
-.testi-grid{grid-template-columns:1fr}
-/* loc single col */
-.loc-in{grid-template-columns:1fr}
-/* cta stacked */
-.cta-btns{flex-direction:column;align-items:stretch;max-width:360px;margin-left:auto;margin-right:auto}
-.btn-cw,.btn-co{width:100%;justify-content:center}
-/* footer */
-.ft-grid{grid-template-columns:1fr;gap:24px}
-.ft-bot{flex-direction:column;align-items:flex-start}
+.ft-top { grid-template-columns:1fr; gap:28px; }
+.ft-bot { flex-direction:column; align-items:flex-start; }
 }
+
 @media(min-width:481px) and (max-width:768px){
-.srv-grid{grid-template-columns:1fr 1fr}
-}
-@media(max-width:480px){
-.gal-grid{grid-template-columns:1fr}
-.gi,.gi-big{height:200px}
+.srv-grid { grid-template-columns:1fr 1fr; }
+.sc-img-wrap { height:160px; }
 }
 </style>
 
 </head>
 <body>
 
-<div id="bar"></div>
+<div id="prog"></div>
 
-<!-- HEADER -->
+<!-- ══ HEADER ══ -->
 
 <header id="hdr">
   <a href="#home" class="logo">
     <img src="SnapInsta.to_623286672_18093397174943883_7290629576634285368_n-removebg-preview.png" alt="OrisCura" class="logo-img">
-    <div class="logo-div"></div>
-    <div>
-      <span class="logo-nm"><span class="c1">ORIS</span><span class="c2">CURA</span></span>
-      <span class="logo-sb">Odontoiatria Specialistica</span>
+    <div class="logo-sep"></div>
+    <div class="logo-words">
+      <span class="logo-name"><span class="w1">ORIS</span><span class="w2">CURA</span></span>
+      <span class="logo-tagline">Odontoiatria Specialistica</span>
     </div>
   </a>
-  <div class="desk-nav">
+  <div class="desk-links">
     <a href="#servizi">Servizi</a>
     <a href="#studio">Studio</a>
     <a href="#dove-siamo">Dove Siamo</a>
-    <a href="#dove-siamo" class="dnav-btn">Prenota</a>
+    <a href="#dove-siamo" class="book-btn">Prenota</a>
   </div>
-  <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  <button class="burger" id="burger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </header>
 
-<!-- MOBILE NAV -->
+<!-- ══ MOBILE MENU ══ -->
 
-<nav class="mob-nav" id="mobNav">
+<nav class="mob-menu" id="mobMenu">
   <a href="#servizi" class="ml">Servizi <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></a>
   <a href="#studio" class="ml">Studio <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></a>
   <a href="#dove-siamo" class="ml">Dove Siamo <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></a>
-  <a href="#dove-siamo" class="ml">→ Prenota Visita</a>
+  <a href="#dove-siamo" class="ml">Prenota una Visita →</a>
 </nav>
 
-<!-- HERO -->
+<!-- ══ HERO ══ -->
 
 <section id="home" class="hero">
   <div class="hero-slides">
-    <div class="hslide hs1 active"></div>
-    <div class="hslide hs2"></div>
-    <div class="hslide hs3"></div>
-    <div class="hslide hs4"></div>
+    <div class="hslide s1 on"></div>
+    <div class="hslide s2"></div>
+    <div class="hslide s3"></div>
+    <div class="hslide s4"></div>
   </div>
-  <div class="hero-overlay"></div>
+  <div class="hero-dim"></div>
   <div class="hdots">
-    <button class="hdot active" data-i="0"></button>
+    <button class="hdot on" data-i="0"></button>
     <button class="hdot" data-i="1"></button>
     <button class="hdot" data-i="2"></button>
     <button class="hdot" data-i="3"></button>
   </div>
-  <div class="hero-content">
-    <div class="hero-tag"><div class="pulse"></div><span>Studio Dentistico · Corato, Puglia</span></div>
-    <h1 class="hero-h1">Il Tuo Sorriso,<br><em>La Nostra</em><br>Missione</h1>
+  <div class="hero-body">
+    <div class="hero-badge">
+      <div class="dot"></div>
+      <span>Studio Dentistico · Corato, Puglia</span>
+    </div>
+    <h1 class="hero-h1">
+      Il Tuo Sorriso,<br>
+      <em>La Nostra</em><br>
+      Missione
+    </h1>
     <p class="hero-sub">Eccellenza odontoiatrica a Corato. Tecnologie d'avanguardia per un sorriso che dura nel tempo.</p>
     <div class="hero-btns">
-      <a href="#dove-siamo" class="btn-hp"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M8 6L21 12 8 18V6z"/></svg>Prenota una Visita</a>
-      <a href="#servizi" class="btn-hg">Scopri i Servizi</a>
+      <a href="#dove-siamo" class="btn-main">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M8 6L21 12 8 18V6z"/></svg>
+        Prenota una Visita
+      </a>
+      <a href="#servizi" class="btn-sec">
+        Scopri i Servizi
+      </a>
     </div>
   </div>
 </section>
 
-<!-- TICKER -->
+<!-- ══ TICKER ══ -->
 
-<div class="ticker-wrap" aria-hidden="true">
-  <div class="ticker-track">
-    <span class="tick-i">Lun–Ven 10–12 / 16–19<span class="tick-dot"></span></span>
-    <span class="tick-i">Tel: 080 817 0385<span class="tick-dot"></span></span>
-    <span class="tick-i">Via M.R. Imbriani, 72 – Corato<span class="tick-dot"></span></span>
-    <span class="tick-i">Implantologia · Ortodonzia · Endodonzia<span class="tick-dot"></span></span>
-    <span class="tick-i">@oris_cura<span class="tick-dot"></span></span>
-    <span class="tick-i">Lun–Ven 10–12 / 16–19<span class="tick-dot"></span></span>
-    <span class="tick-i">Tel: 080 817 0385<span class="tick-dot"></span></span>
-    <span class="tick-i">Via M.R. Imbriani, 72 – Corato<span class="tick-dot"></span></span>
-    <span class="tick-i">Implantologia · Ortodonzia · Endodonzia<span class="tick-dot"></span></span>
-    <span class="tick-i">@oris_cura<span class="tick-dot"></span></span>
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-inner">
+    <span class="tick">Lun–Ven 10–12 / 16–19<span class="tick-dot"></span></span>
+    <span class="tick">Tel: 080 817 0385<span class="tick-dot"></span></span>
+    <span class="tick">Via M.R. Imbriani, 72 – Corato<span class="tick-dot"></span></span>
+    <span class="tick">Implantologia · Ortodonzia · Endodonzia<span class="tick-dot"></span></span>
+    <span class="tick">@oris_cura<span class="tick-dot"></span></span>
+    <span class="tick">Lun–Ven 10–12 / 16–19<span class="tick-dot"></span></span>
+    <span class="tick">Tel: 080 817 0385<span class="tick-dot"></span></span>
+    <span class="tick">Via M.R. Imbriani, 72 – Corato<span class="tick-dot"></span></span>
+    <span class="tick">Implantologia · Ortodonzia · Endodonzia<span class="tick-dot"></span></span>
+    <span class="tick">@oris_cura<span class="tick-dot"></span></span>
   </div>
 </div>
 
-<!-- INFO STRIP -->
+<!-- ══ INFO STRIP ══ -->
 
 <div class="istrip">
   <div class="istrip-in">
-    <div class="ii"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span><strong>Lun–Ven</strong> 10–12 / 16–19</span></div>
-    <div class="ii"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.09a16 16 0 006 6l.36-.36a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg><span><strong>080 817 0385</strong> · 380 688 1599</span></div>
-    <div class="ii"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg><span>Via M.R. Imbriani, 72 – <strong>Corato</strong></span></div>
-    <div class="ii"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg><span>@<strong>oris_cura</strong></span></div>
+    <div class="ii">
+      <div class="ii-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div class="ii-text"><span class="ii-label">Orari</span><span class="ii-val">Lun–Ven: 10–12 / 16–19</span></div>
+    </div>
+    <div class="ii">
+      <div class="ii-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.09a16 16 0 006 6l.36-.36a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+      <div class="ii-text"><span class="ii-label">Telefono</span><span class="ii-val">080 817 0385 · 380 688 1599</span></div>
+    </div>
+    <div class="ii">
+      <div class="ii-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+      <div class="ii-text"><span class="ii-label">Indirizzo</span><span class="ii-val">Via M.R. Imbriani, 72 – Corato</span></div>
+    </div>
+    <div class="ii">
+      <div class="ii-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></div>
+      <div class="ii-text"><span class="ii-label">Instagram</span><span class="ii-val">@oris_cura</span></div>
+    </div>
   </div>
 </div>
 
-<!-- SERVICES -->
+<!-- ══ SERVICES ══ -->
 
-<section id="servizi" class="services">
+<section id="servizi" class="section">
   <div class="wrap">
-    <div class="srv-head">
-      <div class="rv"><p class="eyebrow">Cosa Offriamo</p><h2 class="sec-h">I Nostri <em>Servizi</em></h2></div>
-      <p class="srv-desc rv d2">Trattamenti su misura con tecnologie di ultima generazione.</p>
+    <div class="srv-intro rv">
+      <div>
+        <p class="eyebrow">Cosa Offriamo</p>
+        <h2 class="sec-title" style="margin-bottom:0">I Nostri <em>Servizi</em></h2>
+      </div>
+      <p class="srv-desc">Trattamenti su misura con tecnologie di ultima generazione.</p>
     </div>
+    <div style="height:32px"></div>
     <div class="srv-grid">
-      <div class="scard rv"><img src="3F3A3472.jpg" alt="Igiene Dentale" class="scard-img"><div class="scard-body"><p class="scard-num">01</p><h3 class="scard-name">Igiene Dentale</h3><p class="scard-txt">Pulizia professionale per rimuovere placca e tartaro, base di ogni sorriso sano.</p></div></div>
-      <div class="scard rv d1"><img src="17-instagram.jpg" alt="Ortodonzia" class="scard-img"><div class="scard-body"><p class="scard-num">02</p><h3 class="scard-name">Ortodonzia</h3><p class="scard-txt">Allineamento dentale per un sorriso esteticamente perfetto e funzionale.</p></div></div>
-      <div class="scard rv d2"><img src="impiantologA.jpg" alt="Implantologia" class="scard-img"><div class="scard-body"><p class="scard-num">03</p><h3 class="scard-name">Implantologia</h3><p class="scard-txt">Impianti di alta qualità per ripristinare il sorriso con soluzioni naturali.</p></div></div>
-      <div class="scard rv d3"><img src="endodonzia-elite-odontoiatrica-1024x683.jpg" alt="Endodonzia" class="scard-img"><div class="scard-body"><p class="scard-num">04</p><h3 class="scard-name">Endodonzia</h3><p class="scard-txt">Trattamento canalare per salvare il dente con precisione millimetrica.</p></div></div>
-      <div class="scard rv d4"><img src="prima-visita-dentistica.jpg" alt="Prima Visita" class="scard-img"><div class="scard-body"><p class="scard-num">05</p><h3 class="scard-name">Prima Visita</h3><p class="scard-txt">Valutazione completa e piano di cura personalizzato sul paziente.</p></div></div>
-      <div class="scard rv d5"><img src="thumbnail_IMG_5260.jpg" alt="Estetica" class="scard-img"><div class="scard-body"><p class="scard-num">06</p><h3 class="scard-name">Estetica del Sorriso</h3><p class="scard-txt">Protesi, disturbi ATM e trattamenti estetici per un sorriso armonioso.</p></div></div>
+      <div class="sc rv">
+        <div class="sc-img-wrap"><img src="3F3A3472.jpg" alt="Igiene Dentale" loading="lazy"></div>
+        <div class="sc-body"><p class="sc-num">01</p><h3 class="sc-name">Igiene Dentale</h3><p class="sc-txt">Pulizia professionale per rimuovere placca e tartaro, base di ogni sorriso sano.</p></div>
+      </div>
+      <div class="sc rv d1">
+        <div class="sc-img-wrap"><img src="17-instagram.jpg" alt="Ortodonzia" loading="lazy"></div>
+        <div class="sc-body"><p class="sc-num">02</p><h3 class="sc-name">Ortodonzia</h3><p class="sc-txt">Allineamento dentale per un sorriso esteticamente perfetto e funzionale.</p></div>
+      </div>
+      <div class="sc rv d2">
+        <div class="sc-img-wrap"><img src="impiantologA.jpg" alt="Implantologia" loading="lazy"></div>
+        <div class="sc-body"><p class="sc-num">03</p><h3 class="sc-name">Implantologia</h3><p class="sc-txt">Impianti di alta qualità per ripristinare il sorriso con soluzioni naturali.</p></div>
+      </div>
+      <div class="sc rv d3">
+        <div class="sc-img-wrap"><img src="endodonzia-elite-odontoiatrica-1024x683.jpg" alt="Endodonzia" loading="lazy"></div>
+        <div class="sc-body"><p class="sc-num">04</p><h3 class="sc-name">Endodonzia</h3><p class="sc-txt">Trattamento canalare per salvare il dente con precisione millimetrica.</p></div>
+      </div>
+      <div class="sc rv d4">
+        <div class="sc-img-wrap"><img src="prima-visita-dentistica.jpg" alt="Prima Visita" loading="lazy"></div>
+        <div class="sc-body"><p class="sc-num">05</p><h3 class="sc-name">Prima Visita</h3><p class="sc-txt">Valutazione completa e piano di cura personalizzato sul paziente.</p></div>
+      </div>
+      <div class="sc rv d5">
+        <div class="sc-img-wrap"><img src="thumbnail_IMG_5260.jpg" alt="Estetica" loading="lazy"></div>
+        <div class="sc-body"><p class="sc-num">06</p><h3 class="sc-name">Estetica del Sorriso</h3><p class="sc-txt">Protesi, disturbi ATM e trattamenti estetici per un sorriso armonioso.</p></div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- STATS -->
+<!-- ══ STATS ══ -->
 
 <div class="stats">
   <div class="wrap">
-    <div class="stats-grid">
-      <div class="stat rv"><div class="stat-n"><span class="cnt" data-t="15">0</span>+</div><div class="stat-l">Anni di Esperienza</div></div>
-      <div class="stat rv d1"><div class="stat-n"><span class="cnt" data-t="5000">0</span>+</div><div class="stat-l">Pazienti Soddisfatti</div></div>
+    <div class="stats-row">
+      <div class="stat rv"><div class="stat-n"><span class="cnt" data-t="15">0</span><b>+</b></div><div class="stat-l">Anni di Esperienza</div></div>
+      <div class="stat rv d1"><div class="stat-n"><span class="cnt" data-t="5000">0</span><b>+</b></div><div class="stat-l">Pazienti Soddisfatti</div></div>
       <div class="stat rv d2"><div class="stat-n"><span class="cnt" data-t="6">0</span></div><div class="stat-l">Specializzazioni</div></div>
-      <div class="stat rv d3"><div class="stat-n"><span class="cnt" data-t="100">0</span><span>%</span></div><div class="stat-l">Materiale Sterilizzato</div></div>
+      <div class="stat rv d3"><div class="stat-n"><span class="cnt" data-t="100">0</span><b>%</b></div><div class="stat-l">Materiale Sterilizzato</div></div>
     </div>
   </div>
 </div>
 
-<!-- GALLERY -->
+<!-- ══ GALLERY ══ -->
 
-<section id="studio" class="gallery">
+<section id="studio" class="section alt">
   <div class="wrap">
-    <div class="gal-head rv"><p class="eyebrow">Lo Studio in Immagini</p><h2 class="sec-h">Uno <em>Spazio</em> Unico</h2></div>
+    <div class="rv" style="margin-bottom:36px">
+      <p class="eyebrow">Lo Studio in Immagini</p>
+      <h2 class="sec-title" style="margin-bottom:0">Uno <em>Spazio</em> Unico</h2>
+    </div>
     <div class="gal-grid">
-      <div class="gi gi-big rv"><video autoplay muted loop playsinline src="video1.mp4" poster="poster1.jpg"></video><div class="gi-ov"><span class="gi-label">Esperienza</span></div></div>
-      <div class="gi rv d1"><img src="IMG_3591.png" alt="Lo Studio"><div class="gi-ov"><span class="gi-label">Il Nostro Studio</span></div></div>
-      <div class="gi rv d2"><video autoplay muted loop playsinline src="video2.mp4" poster="poster2.jpg"></video><div class="gi-ov"><span class="gi-label">Sala Secondaria</span></div></div>
-      <div class="gi rv d3"><img src="IMG_3637.png" alt="Intervento"><div class="gi-ov"><span class="gi-label">Precisione</span></div></div>
-      <div class="gi rv d4"><img src="IMG_3635.png" alt="Sala"><div class="gi-ov"><span class="gi-label">Sala Principale</span></div></div>
+      <div class="gi gal-big rv">
+        <video autoplay muted loop playsinline poster="poster1.jpg" style="width:100%;height:100%;object-fit:cover;display:block">
+          <source src="video1.mp4" type="video/mp4">
+          <img src="poster1.jpg" alt="Studio" style="width:100%;height:100%;object-fit:cover">
+        </video>
+        <div class="gi-ov"><span class="gi-lbl">Esperienza</span></div>
+      </div>
+      <div class="gi rv d1">
+        <img src="IMG_3591.png" alt="Il Nostro Studio" loading="lazy" style="width:100%;height:100%;object-fit:cover">
+        <div class="gi-ov"><span class="gi-lbl">Il Nostro Studio</span></div>
+      </div>
+      <div class="gi rv d2">
+        <video autoplay muted loop playsinline poster="poster2.jpg" style="width:100%;height:100%;object-fit:cover;display:block">
+          <source src="video2.mp4" type="video/mp4">
+          <img src="poster2.jpg" alt="Sala" style="width:100%;height:100%;object-fit:cover">
+        </video>
+        <div class="gi-ov"><span class="gi-lbl">Sala Secondaria</span></div>
+      </div>
+      <div class="gi rv d3">
+        <img src="IMG_3637.png" alt="Precisione" loading="lazy" style="width:100%;height:100%;object-fit:cover">
+        <div class="gi-ov"><span class="gi-lbl">Precisione</span></div>
+      </div>
+      <div class="gi rv d4">
+        <img src="IMG_3635.png" alt="Sala Principale" loading="lazy" style="width:100%;height:100%;object-fit:cover">
+        <div class="gi-ov"><span class="gi-lbl">Sala Principale</span></div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- EQUIPMENT -->
+<!-- ══ EQUIPMENT ══ -->
 
-<section class="equipment">
+<section class="section">
   <div class="wrap">
     <div class="equip-in">
       <div class="rl">
         <p class="eyebrow">Strumentazione</p>
-        <h2 class="sec-h">Tecnologia<br><em>d'Avanguardia</em></h2>
+        <h2 class="sec-title">Tecnologia<br><em>d'Avanguardia</em></h2>
         <p class="equip-txt">Investiamo nel continuo aggiornamento del nostro team e in strumenti diagnostici di nuova generazione per trattamenti precisi, sicuri e confortevoli.</p>
-        <div class="etags">
-          <span class="etag">Strumenti di Eccellenza</span>
-          <span class="etag">Alta Qualità</span>
-          <span class="etag">Sterilizzazione Certificata</span>
-          <span class="etag">Diagnostica Avanzata</span>
-          <span class="etag">Team Specializzato</span>
+        <div class="tags">
+          <span class="tag">Strumenti di Eccellenza</span>
+          <span class="tag">Alta Qualità</span>
+          <span class="tag">Sterilizzazione Certificata</span>
+          <span class="tag">Diagnostica Avanzata</span>
+          <span class="tag">Team Specializzato</span>
         </div>
       </div>
       <div class="equip-imgs rr">
-        <img src="IMG_8505.png" alt="Sala Principale">
-        <img src="IMG_8504.png" alt="Attrezzatura">
-        <img src="IMG_8506.png" alt="Sala Operatoria">
+        <div class="img-wrap"><img src="IMG_8505.png" alt="Sala Principale" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+        <div class="img-wrap"><img src="IMG_8504.png" alt="Attrezzatura" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+        <div class="img-wrap"><img src="IMG_8506.png" alt="Sala Operatoria" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
+<!-- ══ TESTIMONIALS ══ -->
 
-<section class="testi">
+<section class="section alt">
   <div class="wrap">
-    <div class="testi-head rv"><p class="eyebrow">Recensioni</p><h2 class="sec-h">Cosa Dicono i <em>Nostri Pazienti</em></h2></div>
+    <div class="rv" style="text-align:center;margin-bottom:40px">
+      <p class="eyebrow" style="justify-content:center"><span></span>Recensioni</p>
+      <h2 class="sec-title" style="margin-bottom:0">Cosa Dicono i <em>Nostri Pazienti</em></h2>
+    </div>
     <div class="testi-grid">
-      <div class="tcard rv d1"><div class="tstars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><p class="tquote">Studio eccezionale, professionalità e cura del paziente impeccabili. Consiglio vivamente a tutti!</p><div class="tauthor"><div class="tavatar">M</div><div><div class="tname">Maria R.</div><div class="tloc">Corato</div></div></div></div>
-      <div class="tcard rv d2"><div class="tstars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><p class="tquote">Ambiente pulito, moderno e staff gentilissimo. Il mio sorriso non è mai stato così bello!</p><div class="tauthor"><div class="tavatar" style="background:linear-gradient(135deg,#a8845a,#c9a96e)">L</div><div><div class="tname">Luigi P.</div><div class="tloc">Barletta</div></div></div></div>
-      <div class="tcard rv d3"><div class="tstars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><p class="tquote">Implantologia perfettamente riuscita, zero dolore. Grazie per l'estrema professionalità.</p><div class="tauthor"><div class="tavatar">A</div><div><div class="tname">Anna C.</div><div class="tloc">Trani</div></div></div></div>
+      <div class="tc rv d1">
+        <div class="tc-stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+        <p class="tc-q">Studio eccezionale, professionalità e cura del paziente impeccabili. Consiglio vivamente a tutti!</p>
+        <div class="tc-author"><div class="tc-av">M</div><div><div class="tc-name">Maria R.</div><div class="tc-loc">Corato</div></div></div>
+      </div>
+      <div class="tc rv d2">
+        <div class="tc-stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+        <p class="tc-q">Ambiente pulito, moderno e staff gentilissimo. Il mio sorriso non è mai stato così bello!</p>
+        <div class="tc-author"><div class="tc-av" style="background:linear-gradient(135deg,#8a6030,#c9a96e)">L</div><div><div class="tc-name">Luigi P.</div><div class="tc-loc">Barletta</div></div></div>
+      </div>
+      <div class="tc rv d3">
+        <div class="tc-stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+        <p class="tc-q">Implantologia perfettamente riuscita, zero dolore. Grazie per l'estrema professionalità in ogni fase.</p>
+        <div class="tc-author"><div class="tc-av">A</div><div><div class="tc-name">Anna C.</div><div class="tc-loc">Trani</div></div></div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- LOCATION -->
+<!-- ══ LOCATION ══ -->
 
-<section id="dove-siamo" class="location">
+<section id="dove-siamo" class="section">
   <div class="wrap">
     <div class="loc-in">
       <div class="rl">
         <p class="eyebrow">Contatti & Orari</p>
-        <h2 class="sec-h">Vieni a <em>Trovarci</em></h2>
-        <div class="cr"><div class="cr-icon"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><p class="cr-label">Indirizzo</p><p class="cr-val">Via M.R. Imbriani, 72 – 70033 Corato (BT)</p></div></div>
-        <div class="cr"><div class="cr-icon"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.09a16 16 0 006 6l.36-.36a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div><div><p class="cr-label">Telefono</p><p class="cr-val"><a href="tel:+390808170385">080 817 0385</a> · <a href="tel:+393806881599">380 688 1599</a></p></div></div>
-        <div class="cr"><div class="cr-icon"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div><p class="cr-label">Email</p><p class="cr-val"><a href="mailto:oriscura10@gmail.com">oriscura10@gmail.com</a></p></div></div>
-        <div class="cr"><div class="cr-icon"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div><p class="cr-label">Orari</p><p class="cr-val">Lun–Ven: 10:00–12:00 · 16:00–19:00<br><small>Solo su appuntamento</small></p></div></div>
+        <h2 class="sec-title">Vieni a <em>Trovarci</em></h2>
+        <div class="cr">
+          <div class="cr-icon"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><p class="cr-lbl">Indirizzo</p><p class="cr-val">Via M.R. Imbriani, 72 – 70033 Corato (BT)</p></div>
+        </div>
+        <div class="cr">
+          <div class="cr-icon"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.09a16 16 0 006 6l.36-.36a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+          <div><p class="cr-lbl">Telefono</p><p class="cr-val"><a href="tel:+390808170385">080 817 0385</a> · <a href="tel:+393806881599">380 688 1599</a></p></div>
+        </div>
+        <div class="cr">
+          <div class="cr-icon"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div><p class="cr-lbl">Email</p><p class="cr-val"><a href="mailto:oriscura10@gmail.com">oriscura10@gmail.com</a></p></div>
+        </div>
+        <div class="cr">
+          <div class="cr-icon"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div><p class="cr-lbl">Orari</p><p class="cr-val">Lun–Ven: 10:00–12:00 · 16:00–19:00<br><small>Solo su appuntamento</small></p></div>
+        </div>
       </div>
-      <div class="map-wrap rr">
+      <div class="map-box rr">
         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3004.323321253266!2d16.409141575866002!3d41.14929577133117!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x13380f8aa5a36d75%3A0x75283965b4708489!2sOris%20Cura%20Srl%20%2F%20Stp!5e0!3m2!1sit!2sit!4v1724703948782!5m2!1sit!2sit" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
+<!-- ══ CTA ══ -->
 
-<section class="cta">
+<section class="cta-section">
   <h2 class="cta-h rv">Prenota la Tua <em>Prima Visita</em></h2>
   <p class="cta-sub rv d1">Il primo passo verso un sorriso sano è una telefonata. Contattaci oggi.</p>
   <div class="cta-btns rv d2">
-    <a href="tel:+390808170385" class="btn-cw"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.09a16 16 0 006 6l.36-.36a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Chiama Ora</a>
-    <a href="mailto:oriscura10@gmail.com" class="btn-co"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Scrivi una Email</a>
+    <a href="tel:+390808170385" class="btn-cw">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.09a16 16 0 006 6l.36-.36a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      Chiama Ora
+    </a>
+    <a href="mailto:oriscura10@gmail.com" class="btn-co">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Scrivi una Email
+    </a>
   </div>
 </section>
 
-<!-- FOOTER -->
+<!-- ══ FOOTER ══ -->
 
 <footer>
-  <div class="ft-grid">
-    <div class="ft-brand">
-      <span class="ft-ln"><span class="c1">ORIS</span><span class="c2">CURA</span></span>
-      <p>Studio di Odontoiatria Specialistica SRL/STP. Dir. San. Dr. Cataldo Grammatica – N. 388 Albo Odontoiatri BAT.</p>
-      <div class="ft-socials">
-        <a href="https://www.instagram.com/oris_cura/" class="fsoc" target="_blank" rel="noopener" aria-label="Instagram"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
-        <a href="https://www.instagram.com/dr.aldogrammatica/" class="fsoc" target="_blank" rel="noopener" aria-label="Dr. Grammatica"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
+  <div class="ft-in">
+    <div class="ft-top">
+      <div class="ft-brand">
+        <div class="ft-name">ORIS<span>CURA</span></div>
+        <p>Studio di Odontoiatria Specialistica SRL/STP. Dir. San. Dr. Cataldo Grammatica – N. 388 Albo Odontoiatri BAT.</p>
+        <div class="ft-soc">
+          <a href="https://www.instagram.com/oris_cura/" class="fsb" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="https://www.instagram.com/dr.aldogrammatica/" class="fsb" target="_blank" rel="noopener" aria-label="Dr. Grammatica">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="ft-col">
+        <h4>Servizi</h4>
+        <ul>
+          <li><a href="#servizi">Igiene Dentale</a></li>
+          <li><a href="#servizi">Ortodonzia</a></li>
+          <li><a href="#servizi">Implantologia</a></li>
+          <li><a href="#servizi">Endodonzia</a></li>
+          <li><a href="#servizi">Estetica del Sorriso</a></li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h4>Contatti</h4>
+        <ul>
+          <li><a href="tel:+390808170385">080 817 0385</a></li>
+          <li><a href="tel:+393806881599">380 688 1599</a></li>
+          <li><a href="mailto:oriscura10@gmail.com">oriscura10@gmail.com</a></li>
+          <li><a href="#dove-siamo">Via M.R. Imbriani, 72</a></li>
+        </ul>
       </div>
     </div>
-    <div class="ft-col"><h4>Servizi</h4><ul><li><a href="#servizi">Igiene Dentale</a></li><li><a href="#servizi">Ortodonzia</a></li><li><a href="#servizi">Implantologia</a></li><li><a href="#servizi">Endodonzia</a></li><li><a href="#servizi">Estetica del Sorriso</a></li></ul></div>
-    <div class="ft-col"><h4>Contatti</h4><ul><li><a href="tel:+390808170385">080 817 0385</a></li><li><a href="tel:+393806881599">380 688 1599</a></li><li><a href="mailto:oriscura10@gmail.com">oriscura10@gmail.com</a></li><li><a href="#dove-siamo">Via M.R. Imbriani, 72</a></li></ul></div>
+    <div class="ft-bot">
+      <span>© 2026 OrisCura SRL/STP – Tutti i diritti riservati.</span>
+      <span>Corato, Puglia</span>
+    </div>
   </div>
-  <div class="ft-bot"><span>© 2026 OrisCura SRL/STP – Tutti i diritti riservati.</span><span>Corato, Puglia</span></div>
 </footer>
 
 <script>
 // progress
-const bar=document.getElementById('bar');
-window.addEventListener('scroll',()=>{bar.style.width=(scrollY/(document.body.scrollHeight-innerHeight)*100)+'%'},{passive:true});
+const prog = document.getElementById('prog');
+window.addEventListener('scroll', () => {
+  prog.style.width = (scrollY / (document.body.scrollHeight - innerHeight) * 100) + '%';
+}, { passive: true });
 
 // header
-const hdr=document.getElementById('hdr');
-window.addEventListener('scroll',()=>hdr.classList.toggle('scrolled',scrollY>60),{passive:true});
+const hdr = document.getElementById('hdr');
+window.addEventListener('scroll', () => hdr.classList.toggle('scrolled', scrollY > 60), { passive: true });
 
 // slideshow
-const slides=document.querySelectorAll('.hslide'),dots=document.querySelectorAll('.hdot');
-let cur=0;
-function goTo(i){slides[cur].classList.remove('active');dots[cur].classList.remove('active');cur=i;slides[cur].classList.add('active');dots[cur].classList.add('active');}
-dots.forEach(d=>d.addEventListener('click',()=>goTo(+d.dataset.i)));
-setInterval(()=>goTo((cur+1)%slides.length),5000);
+const slides = document.querySelectorAll('.hslide');
+const hdots  = document.querySelectorAll('.hdot');
+let cur = 0;
+function goTo(i) {
+  slides[cur].classList.remove('on'); hdots[cur].classList.remove('on');
+  cur = i;
+  slides[cur].classList.add('on'); hdots[cur].classList.add('on');
+}
+hdots.forEach(d => d.addEventListener('click', () => goTo(+d.dataset.i)));
+setInterval(() => goTo((cur + 1) % slides.length), 5000);
 
 // mobile nav
-const burger=document.getElementById('burger'),mob=document.getElementById('mobNav');
-burger.addEventListener('click',()=>{
-  const o=!mob.classList.contains('open');
-  burger.classList.toggle('open',o);mob.classList.toggle('open',o);
-  document.body.style.overflow=o?'hidden':'';
+const burger = document.getElementById('burger');
+const mob    = document.getElementById('mobMenu');
+burger.addEventListener('click', () => {
+  const open = !mob.classList.contains('open');
+  burger.classList.toggle('open', open);
+  mob.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
 });
-mob.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{burger.classList.remove('open');mob.classList.remove('open');document.body.style.overflow='';}));
+mob.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  burger.classList.remove('open'); mob.classList.remove('open');
+  document.body.style.overflow = '';
+}));
 
 // reveal
-const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');ro.unobserve(e.target);}});},{threshold:.07,rootMargin:'0px 0px -24px 0px'});
-document.querySelectorAll('.rv,.rl,.rr').forEach(el=>ro.observe(el));
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); ro.unobserve(e.target); } });
+}, { threshold: 0.06, rootMargin: '0px 0px -20px 0px' });
+document.querySelectorAll('.rv, .rl, .rr').forEach(el => ro.observe(el));
 
 // counters
-function animC(el,t){let v=0,s=t/60;const i=setInterval(()=>{v=Math.min(v+s,t);el.textContent=Math.floor(v).toLocaleString('it-IT');if(v>=t){el.textContent=t.toLocaleString('it-IT');clearInterval(i);}},24);}
-const co=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.querySelectorAll('.cnt').forEach(c=>animC(c,+c.dataset.t));co.unobserve(e.target);}});},{threshold:.3});
-document.querySelectorAll('.stats-grid').forEach(el=>co.observe(el));
+function animC(el, t) {
+  let v = 0, step = t / 55;
+  const iv = setInterval(() => {
+    v = Math.min(v + step, t);
+    el.textContent = Math.floor(v).toLocaleString('it-IT');
+    if (v >= t) { el.textContent = t.toLocaleString('it-IT'); clearInterval(iv); }
+  }, 22);
+}
+const co = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.cnt').forEach(c => animC(c, +c.dataset.t));
+      co.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.stats-row').forEach(el => co.observe(el));
 </script>
 
 </body>

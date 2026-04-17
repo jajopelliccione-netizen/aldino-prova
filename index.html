@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OrisCura – Studio di Odontoiatria Specialistica | Corato</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --teal:#58b0b3;--teal2:#3d9ea1;--teal3:#1d6568;
+  --gold:#c9a96e;--gold2:#a8845a;
+  --black:#04080f;--dark:#080e18;--dark2:#0d1525;
+  --white:#f5f3ef;--off:#d4d0c8;
+  --glass:rgba(255,255,255,.04);--glassborder:rgba(255,255,255,.08);
+}
+html{scroll-behavior:smooth;cursor:none}
+body{font-family:'DM Sans',sans-serif;background:var(--black);color:var(--white);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+img,video{display:block;max-width:100%}
+
+/* ── CUSTOM CURSOR ── */
+#cursor{position:fixed;top:0;left:0;z-index:9999;pointer-events:none}
+.cur-dot{width:8px;height:8px;background:var(–teal);border-radius:50%;position:absolute;transform:translate(-50%,-50%);transition:transform .1s,background .2s,width .3s,height .3s}
+.cur-ring{width:36px;height:36px;border:1.5px solid rgba(88,176,179,.5);border-radius:50%;position:absolute;transform:translate(-50%,-50%);transition:all .15s ease,width .3s,height .3s,opacity .3s;transition-delay:.03s}
+body.hovering .cur-dot{width:0;height:0}
+body.hovering .cur-ring{width:56px;height:56px;background:rgba(88,176,179,.08);border-color:var(–teal)}
+
+/* ── NOISE OVERLAY ── */
+body::before{content:’’;position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.025;background-image:url(“data:image/svg+xml,%3Csvg viewBox=‘0 0 256 256’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Cfilter id=‘noise’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=‘0.9’ numOctaves=‘4’ stitchTiles=‘stitch’/%3E%3C/filter%3E%3Crect width=‘100%25’ height=‘100%25’ filter=‘url(%23noise)’/%3E%3C/svg%3E”);background-size:180px}
+
+/* ── CANVAS PARTICLES ── */
+#particles{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5}
+
+/* ── HEADER ── */
+header{position:fixed;top:0;left:0;right:0;z-index:100;height:80px;display:flex;align-items:center;justify-content:space-between;padding:0 52px;transition:all .5s cubic-bezier(.16,1,.3,1)}
+header::before{content:’’;position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,8,15,.9) 0%,transparent 100%);pointer-events:none;opacity:0;transition:opacity .4s}
+header.scrolled::before{opacity:1}
+header.scrolled{height:64px;border-bottom:1px solid rgba(88,176,179,.1)}
+.logo{display:flex;align-items:center;gap:10px;position:relative;z-index:1}
+.logo-img{height:44px;filter:brightness(1.1);transition:transform .3s}
+.logo:hover .logo-img{transform:scale(1.05)}
+.logo-divider{width:1px;height:34px;background:linear-gradient(180deg,transparent,rgba(88,176,179,.5),transparent)}
+.logo-text{display:flex;flex-direction:column;gap:2px}
+.logo-name{font-family:‘Syne’,sans-serif;font-size:1.5rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;line-height:1}
+.logo-name .c1{color:#fff}
+.logo-name .c2{color:var(–teal)}
+.logo-sub{font-size:.48rem;letter-spacing:3.5px;text-transform:uppercase;color:rgba(255,255,255,.4);font-weight:500}
+nav{display:flex;align-items:center;gap:4px;position:relative;z-index:1}
+nav a{font-size:.7rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5);padding:8px 16px;border-radius:100px;transition:all .3s;position:relative}
+nav a::after{content:’’;position:absolute;bottom:4px;left:50%;width:0;height:1px;background:var(–teal);transform:translateX(-50%);transition:width .3s}
+nav a:hover{color:#fff}
+nav a:hover::after{width:40%}
+.nav-btn{background:rgba(88,176,179,.12);color:var(–teal)!important;border:1px solid rgba(88,176,179,.3);border-radius:100px;padding:9px 24px!important;font-weight:700!important;transition:all .3s!important;position:relative;overflow:hidden}
+.nav-btn::before{content:’’;position:absolute;inset:0;background:var(–teal);transform:scaleX(0);transform-origin:left;transition:transform .4s cubic-bezier(.16,1,.3,1);border-radius:inherit}
+.nav-btn span{position:relative;z-index:1}
+.nav-btn:hover{color:#fff!important;border-color:var(–teal)}
+.nav-btn:hover::before{transform:scaleX(1)}
+.nav-btn::after{display:none!important}
+.burger{display:none;flex-direction:column;gap:5px;cursor:none;background:none;border:none;padding:8px}
+.burger span{display:block;width:22px;height:1.5px;background:rgba(255,255,255,.7);border-radius:2px;transition:all .35s cubic-bezier(.16,1,.3,1)}
+.burger.open span:nth-child(1){transform:rotate(45deg) translate(4.5px,4.5px)}
+.burger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.burger.open span:nth-child(3){transform:rotate(-45deg) translate(4.5px,-4.5px)}
+.mob-nav{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(4,8,15,.97);backdrop-filter:blur(30px);z-index:98;flex-direction:column;justify-content:center;align-items:center;gap:8px;opacity:0;pointer-events:none;transition:opacity .5s}
+.mob-nav.open{opacity:1;pointer-events:all}
+.mob-nav a{font-family:‘Syne’,sans-serif;font-size:clamp(1.8rem,6vw,3rem);font-weight:700;text-transform:uppercase;letter-spacing:3px;color:rgba(255,255,255,.3);transition:color .3s,transform .3s;transform:translateY(20px);opacity:0}
+.mob-nav.open a{opacity:1;transform:none}
+.mob-nav a:nth-child(1){transition-delay:.1s}
+.mob-nav a:nth-child(2){transition-delay:.15s}
+.mob-nav a:nth-child(3){transition-delay:.2s}
+.mob-nav a:nth-child(4){transition-delay:.25s;color:var(–teal)!important;font-size:1.2rem;letter-spacing:4px;margin-top:16px}
+.mob-nav a:hover{color:#fff;transform:translateX(8px)!important}
+
+/* ── HERO ── */
+.hero{position:relative;height:100vh;min-height:700px;display:flex;align-items:flex-end;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:1}
+.hero-slides{position:absolute;inset:0}
+.hslide{position:absolute;inset:0;opacity:0;transition:opacity 1.8s cubic-bezier(.16,1,.3,1);background-size:cover;background-position:center;transform:scale(1.05);transition:opacity 1.8s ease, transform 7s cubic-bezier(.16,1,.3,1)}
+.hslide.active{opacity:1;transform:scale(1)}
+.hs1{background-image:url(‘IMG_8505.png’)}
+.hs2{background-image:url(‘IMG_8506.png’);background-position:center 30%}
+.hs3{background-image:url(‘IMG_3636.png’)}
+.hs4{background-image:url(‘IMG_3637.png’)}
+.hero-bg::after{content:’’;position:absolute;inset:0;background:linear-gradient(135deg,rgba(4,8,15,.85) 0%,rgba(4,8,15,.4) 50%,rgba(4,8,15,.75) 100%),linear-gradient(0deg,rgba(4,8,15,.9) 0%,transparent 50%);z-index:2}
+.hero-content{position:relative;z-index:10;padding:0 52px 80px;width:100%;max-width:1300px;margin:0 auto}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;margin-bottom:24px;opacity:0;transform:translateY(20px);animation:fadeUp .8s .3s forwards}
+.hero-eyebrow .pulse{width:8px;height:8px;background:var(–teal);border-radius:50%;position:relative}
+.hero-eyebrow .pulse::after{content:’’;position:absolute;inset:-4px;border-radius:50%;border:1px solid var(–teal);animation:pulseRing 2s infinite}
+.hero-eyebrow span{font-size:.68rem;letter-spacing:3px;text-transform:uppercase;color:var(–teal);font-weight:600}
+.hero-title{font-family:‘DM Serif Display’,serif;font-size:clamp(3.5rem,8vw,8rem);line-height:.92;color:#fff;margin-bottom:28px}
+.hero-title .line{overflow:hidden;display:block}
+.hero-title .word{display:inline-block;opacity:0;transform:translateY(100%);animation:slideUp .9s cubic-bezier(.16,1,.3,1) forwards}
+.hero-title .l1{animation-delay:.5s}
+.hero-title .l2{animation-delay:.65s}
+.hero-title .l3{animation-delay:.8s}
+.hero-title .ac{font-style:italic;color:var(–teal)}
+.hero-sub{font-size:1rem;color:rgba(255,255,255,.55);max-width:420px;line-height:1.7;margin-bottom:40px;opacity:0;animation:fadeUp .8s 1s forwards}
+.hero-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap;opacity:0;animation:fadeUp .8s 1.1s forwards}
+.btn-primary{background:var(–teal);color:#fff;padding:16px 36px;border-radius:100px;font-weight:600;font-size:.9rem;letter-spacing:.5px;display:inline-flex;align-items:center;gap:10px;position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s}
+.btn-primary::before{content:’’;position:absolute;inset:0;background:linear-gradient(135deg,var(–teal),var(–teal3));opacity:0;transition:opacity .3s}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 20px 40px rgba(88,176,179,.35)}
+.btn-primary:hover::before{opacity:1}
+.btn-primary span,.btn-primary svg{position:relative;z-index:1}
+.btn-ghost{color:rgba(255,255,255,.7);padding:16px 28px;border-radius:100px;border:1px solid rgba(255,255,255,.2);font-size:.9rem;font-weight:500;display:inline-flex;align-items:center;gap:8px;transition:all .3s;backdrop-filter:blur(8px)}
+.btn-ghost:hover{color:#fff;border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.06)}
+.hero-dots{position:absolute;right:52px;bottom:80px;z-index:10;display:flex;flex-direction:column;gap:8px;opacity:0;animation:fadeIn 1s 1.3s forwards}
+.hdot{width:4px;height:20px;border-radius:2px;background:rgba(255,255,255,.2);cursor:none;transition:all .4s}
+.hdot.active{height:48px;background:var(–teal)}
+.hero-line{position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 0%,rgba(88,176,179,.4) 50%,transparent 100%);z-index:10}
+.scroll-hint{position:absolute;left:52px;bottom:72px;z-index:10;display:flex;align-items:center;gap:12px;opacity:0;animation:fadeIn 1s 1.4s forwards}
+.scroll-hint span{font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3)}
+.scroll-line{width:40px;height:1px;background:rgba(255,255,255,.2);position:relative;overflow:hidden}
+.scroll-line::after{content:’’;position:absolute;top:0;left:-100%;width:100%;height:100%;background:var(–teal);animation:scrollAnim 2s infinite}
+
+/* ── TICKER BAND ── */
+.ticker-wrap{background:var(–teal3);overflow:hidden;white-space:nowrap;padding:10px 0;position:relative;z-index:2}
+.ticker{display:inline-flex;animation:ticker 30s linear infinite}
+.ticker-item{display:inline-flex;align-items:center;gap:16px;padding:0 24px;font-size:.72rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.85)}
+.ticker-item svg{color:rgba(255,255,255,.5);flex-shrink:0}
+.ticker-dot{width:4px;height:4px;background:rgba(255,255,255,.4);border-radius:50%;flex-shrink:0}
+
+/* ── INFO STRIP ── */
+.infostrip{background:var(–dark2);border-bottom:1px solid rgba(88,176,179,.1)}
+.infostrip-in{max-width:1300px;margin:0 auto;padding:0 52px;display:flex;align-items:center;gap:0}
+.inf{display:flex;align-items:center;gap:12px;padding:20px 32px 20px 0;margin-right:32px;border-right:1px solid rgba(255,255,255,.06);flex-shrink:0}
+.inf:last-child{border-right:none;margin-right:0}
+.inf-icon{width:36px;height:36px;background:rgba(88,176,179,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.inf-icon svg{color:var(–teal)}
+.inf-text{display:flex;flex-direction:column;gap:2px}
+.inf-label{font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3)}
+.inf-val{font-size:.86rem;font-weight:500;color:rgba(255,255,255,.8)}
+.inf-val strong{color:#fff}
+
+/* ── SECTIONS BASE ── */
+.section-inner{max-width:1300px;margin:0 auto;padding:0 52px}
+.s-eyebrow{font-size:.65rem;letter-spacing:4px;text-transform:uppercase;color:var(–teal);font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.s-eyebrow::before{content:’’;width:24px;height:1px;background:var(–teal)}
+.s-title{font-family:‘DM Serif Display’,serif;font-size:clamp(2.4rem,5vw,4.2rem);line-height:1;color:#fff;margin-bottom:16px}
+.s-title em{font-style:italic;color:var(–teal)}
+.s-title.dark{color:var(–black)}
+.s-title.dark em{color:var(–teal2)}
+
+/* ── SERVICES ── */
+.services{padding:120px 0;background:var(–black);position:relative;z-index:2}
+.services::before{content:’’;position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:100%;background:linear-gradient(180deg,transparent,rgba(88,176,179,.15),transparent)}
+.srv-header{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end;margin-bottom:64px}
+.srv-desc{font-size:.96rem;color:rgba(255,255,255,.4);line-height:1.75;max-width:340px;align-self:end}
+.srv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.06);border-radius:20px;overflow:hidden}
+.srv-card{background:var(–dark);padding:36px 32px;position:relative;overflow:hidden;transition:background .4s;cursor:none}
+.srv-card::before{content:’’;position:absolute;inset:0;background:linear-gradient(135deg,rgba(88,176,179,.06),transparent);opacity:0;transition:opacity .4s}
+.srv-card::after{content:’’;position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,var(–teal),transparent);transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.srv-card:hover{background:var(–dark2)}
+.srv-card:hover::before{opacity:1}
+.srv-card:hover::after{transform:scaleX(1)}
+.srv-num{font-family:‘Syne’,sans-serif;font-size:.58rem;letter-spacing:3px;color:rgba(88,176,179,.5);font-weight:600;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.srv-num::after{content:’’;flex:1;height:1px;background:rgba(88,176,179,.15)}
+.srv-img{width:100%;height:180px;object-fit:cover;border-radius:12px;margin-bottom:20px;transition:transform .6s cubic-bezier(.16,1,.3,1);filter:brightness(.85) saturate(.8)}
+.srv-card:hover .srv-img{transform:scale(1.04);filter:brightness(1) saturate(1)}
+.srv-name{font-family:‘Syne’,sans-serif;font-size:1.15rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#fff;margin-bottom:8px;transition:color .3s}
+.srv-card:hover .srv-name{color:var(–teal)}
+.srv-body{font-size:.84rem;color:rgba(255,255,255,.35);line-height:1.7;transition:color .3s}
+.srv-card:hover .srv-body{color:rgba(255,255,255,.55)}
+.srv-arrow{position:absolute;bottom:28px;right:28px;width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.3);transition:all .4s;transform:translate(8px,-8px);opacity:0}
+.srv-card:hover .srv-arrow{opacity:1;transform:none;border-color:var(–teal);color:var(–teal)}
+
+/* ── STATS ── */
+.stats{padding:80px 0;background:var(–dark2);border-top:1px solid rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.04);position:relative;z-index:2}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.04)}
+.stat-item{padding:48px 40px;background:var(–dark2);text-align:center;position:relative;overflow:hidden}
+.stat-item::before{content:’’;position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(88,176,179,.05),transparent 70%);opacity:0;transition:opacity .5s}
+.stat-item:hover::before{opacity:1}
+.stat-num{font-family:‘DM Serif Display’,serif;font-size:3.5rem;color:#fff;line-height:1;margin-bottom:6px}
+.stat-num span{color:var(–teal)}
+.stat-label{font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.3)}
+
+/* ── MEDIA GALLERY ── */
+.gallery{padding:120px 0;background:var(–black);position:relative;z-index:2}
+.gallery-header{margin-bottom:56px}
+.gallery-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;grid-template-rows:300px 240px;gap:6px}
+.gitem{position:relative;overflow:hidden;border-radius:4px;background:var(–dark)}
+.gitem-big{grid-row:span 2}
+.gitem img,.gitem video{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.16,1,.3,1),filter .5s;filter:brightness(.7) saturate(.7)}
+.gitem:hover img,.gitem:hover video{transform:scale(1.06);filter:brightness(1) saturate(1)}
+.gitem-overlay{position:absolute;inset:0;background:linear-gradient(0deg,rgba(4,8,15,.7) 0%,transparent 55%);display:flex;align-items:flex-end;padding:20px;pointer-events:none;transition:opacity .4s}
+.gitem:hover .gitem-overlay{opacity:.6}
+.gitem-label{font-family:‘Syne’,sans-serif;font-size:.7rem;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.7)}
+.gitem-badge{position:absolute;top:16px;right:16px;background:rgba(4,8,15,.7);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(8px);padding:4px 12px;border-radius:100px;font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.6);opacity:0;transform:translateY(-8px);transition:all .4s}
+.gitem:hover .gitem-badge{opacity:1;transform:none}
+
+/* ── DOCTOR ── */
+.doctor{padding:120px 0;background:var(–dark2);position:relative;z-index:2;overflow:hidden}
+.doctor::before{content:’’;position:absolute;top:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(ellipse,rgba(88,176,179,.06),transparent 70%);pointer-events:none}
+.doctor-inner{display:grid;grid-template-columns:1fr 1.1fr;gap:80px;align-items:center}
+.doctor-visual{position:relative}
+.doctor-img-wrap{position:relative;border-radius:20px;overflow:hidden}
+.doctor-img-wrap img{width:100%;height:520px;object-fit:cover;object-position:top;filter:grayscale(30%);transition:filter .5s}
+.doctor-img-wrap:hover img{filter:grayscale(0)}
+.doctor-img-wrap::after{content:’’;position:absolute;inset:0;background:linear-gradient(135deg,rgba(88,176,179,.1),transparent 60%,rgba(4,8,15,.4))}
+.doctor-badge{position:absolute;bottom:28px;left:28px;background:rgba(4,8,15,.85);border:1px solid rgba(88,176,179,.2);backdrop-filter:blur(16px);padding:16px 20px;border-radius:14px}
+.doctor-badge-title{font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(–teal);margin-bottom:4px}
+.doctor-badge-name{font-family:‘Syne’,sans-serif;font-size:.95rem;font-weight:700;color:#fff}
+.doctor-badge-sub{font-size:.75rem;color:rgba(255,255,255,.45);margin-top:2px}
+.deco-line{position:absolute;top:50%;left:-20px;transform:translateY(-50%);width:6px;height:120px;background:linear-gradient(180deg,transparent,var(–teal),transparent);border-radius:3px}
+.doctor-content .s-title{margin-bottom:24px}
+.doctor-text{font-size:1rem;color:rgba(255,255,255,.45);line-height:1.8;margin-bottom:32px}
+.doctor-feats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:40px}
+.dfeat{background:var(–glass);border:1px solid var(–glassborder);border-radius:14px;padding:16px 18px;display:flex;align-items:center;gap:12px;transition:all .3s}
+.dfeat:hover{background:rgba(88,176,179,.06);border-color:rgba(88,176,179,.2)}
+.dfeat-icon{width:36px;height:36px;background:rgba(88,176,179,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dfeat-icon svg{color:var(–teal)}
+.dfeat-text{font-size:.84rem;color:rgba(255,255,255,.55);font-weight:500}
+.dfeat:hover .dfeat-text{color:#fff}
+
+/* ── EQUIPMENT ── */
+.equipment{padding:120px 0;background:var(–black);position:relative;z-index:2}
+.equip-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.equip-imgs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.equip-imgs img{border-radius:12px;width:100%;height:200px;object-fit:cover;transition:transform .5s,filter .5s;filter:brightness(.75) saturate(.7)}
+.equip-imgs img:first-child{grid-column:span 2;height:260px}
+.equip-imgs img:hover{transform:scale(1.02);filter:brightness(1) saturate(1)}
+.equip-content .s-title{margin-bottom:20px}
+.equip-text{font-size:.96rem;color:rgba(255,255,255,.4);line-height:1.8;margin-bottom:32px}
+.equip-tags{display:flex;flex-wrap:wrap;gap:8px}
+.etag{background:var(–glass);border:1px solid var(–glassborder);padding:8px 18px;border-radius:100px;font-size:.78rem;color:rgba(255,255,255,.5);font-weight:500;transition:all .3s;cursor:none}
+.etag:hover{background:rgba(88,176,179,.1);border-color:rgba(88,176,179,.3);color:var(–teal)}
+
+/* ── TESTIMONIALS ── */
+.testi{padding:100px 0;background:var(–dark2);position:relative;z-index:2;overflow:hidden}
+.testi::before{content:’’;position:absolute;bottom:-200px;left:-200px;width:600px;height:600px;background:radial-gradient(ellipse,rgba(88,176,179,.05),transparent 70%);pointer-events:none}
+.testi-header{text-align:center;margin-bottom:60px}
+.testi-header .s-eyebrow{justify-content:center}
+.testi-header .s-eyebrow::before{display:none}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.tcard{background:var(–glass);border:1px solid var(–glassborder);border-radius:20px;padding:32px 28px;transition:all .4s;position:relative;overflow:hidden;cursor:none}
+.tcard::before{content:’’;position:absolute;inset:0;background:linear-gradient(135deg,rgba(88,176,179,.04),transparent 60%);opacity:0;transition:opacity .4s;border-radius:inherit}
+.tcard:hover{border-color:rgba(88,176,179,.2);transform:translateY(-6px);box-shadow:0 24px 60px rgba(0,0,0,.3)}
+.tcard:hover::before{opacity:1}
+.tcard-stars{display:flex;gap:4px;margin-bottom:20px}
+.tcard-stars svg{color:var(–gold);fill:var(–gold);width:14px;height:14px}
+.tcard-quote{font-size:.94rem;color:rgba(255,255,255,.55);line-height:1.75;margin-bottom:24px;font-style:italic}
+.tcard-author{display:flex;align-items:center;gap:12px}
+.tcard-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(–teal3),var(–teal));display:flex;align-items:center;justify-content:center;font-family:‘Syne’,sans-serif;font-weight:700;font-size:.9rem;color:#fff;flex-shrink:0}
+.tcard-name{font-family:‘Syne’,sans-serif;font-weight:600;font-size:.86rem;color:#fff}
+.tcard-loc{font-size:.73rem;color:rgba(255,255,255,.3);margin-top:1px}
+
+/* ── LOCATION ── */
+.location{padding:120px 0;background:var(–black);position:relative;z-index:2}
+.loc-inner{display:grid;grid-template-columns:1fr 1.5fr;gap:72px;align-items:start}
+.loc-info .s-title{margin-bottom:36px}
+.contact-item{display:flex;gap:16px;align-items:flex-start;padding:20px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.contact-item:last-of-type{border-bottom:none}
+.ci-icon{width:42px;height:42px;background:rgba(88,176,179,.08);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .3s}
+.contact-item:hover .ci-icon{background:rgba(88,176,179,.15);transform:scale(1.05)}
+.ci-icon svg{color:var(–teal)}
+.ci-label{font-size:.6rem;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:4px}
+.ci-value{font-size:.96rem;color:rgba(255,255,255,.7);font-weight:500;line-height:1.5;transition:color .3s}
+.contact-item:hover .ci-value{color:#fff}
+.ci-value a{color:inherit;transition:color .3s}
+.ci-value a:hover{color:var(–teal)}
+.ci-value small{font-size:.82rem;color:rgba(255,255,255,.3);font-weight:400}
+.map-wrap{border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.06);box-shadow:0 24px 60px rgba(0,0,0,.4);position:relative}
+.map-wrap::before{content:’’;position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(–teal),transparent);z-index:1}
+.map-wrap iframe{width:100%;height:460px;border:none;display:block;filter:brightness(.85) saturate(.5)}
+
+/* ── CTA SECTION ── */
+.cta-section{padding:100px 52px;position:relative;z-index:2;overflow:hidden;background:var(–dark2)}
+.cta-bg{position:absolute;inset:0;background:linear-gradient(135deg,rgba(88,176,179,.12) 0%,transparent 50%,rgba(88,176,179,.06) 100%);pointer-events:none}
+.cta-bg-lines{position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(88,176,179,.02) 0px,rgba(88,176,179,.02) 1px,transparent 1px,transparent 80px);pointer-events:none}
+.cta-inner{position:relative;z-index:1;text-align:center;max-width:700px;margin:0 auto}
+.cta-inner .s-eyebrow{justify-content:center}
+.cta-inner .s-eyebrow::before{display:none}
+.cta-title{font-family:‘DM Serif Display’,serif;font-size:clamp(2.5rem,5vw,4.5rem);color:#fff;line-height:1;margin-bottom:20px}
+.cta-title em{font-style:italic;color:var(–teal)}
+.cta-sub{font-size:1rem;color:rgba(255,255,255,.45);line-height:1.7;margin-bottom:44px;max-width:460px;margin-left:auto;margin-right:auto}
+.cta-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+
+/* ── FOOTER ── */
+footer{background:var(–dark);border-top:1px solid rgba(255,255,255,.05);padding:72px 52px 28px;position:relative;z-index:2}
+.ft-grid{max-width:1300px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:56px;padding-bottom:56px;border-bottom:1px solid rgba(255,255,255,.05)}
+.ft-brand .logo-name{font-family:‘Syne’,sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;line-height:1;margin-bottom:12px}
+.ft-brand .logo-name .c1{color:#fff}
+.ft-brand .logo-name .c2{color:var(–teal)}
+.ft-brand p{font-size:.82rem;color:rgba(255,255,255,.28);line-height:1.7;max-width:220px;margin-bottom:24px}
+.ft-socials{display:flex;gap:8px}
+.ft-soc{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.35);transition:all .3s;cursor:none}
+.ft-soc:hover{background:var(–teal);color:#fff;border-color:var(–teal);transform:translateY(-2px)}
+.ft-col h4{font-family:‘Syne’,sans-serif;font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:rgba(88,176,179,.7);margin-bottom:18px}
+.ft-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.ft-col ul li a{font-size:.84rem;color:rgba(255,255,255,.3);transition:all .3s;display:flex;align-items:center;gap:6px}
+.ft-col ul li a::before{content:’’;width:0;height:1px;background:var(–teal);transition:width .3s}
+.ft-col ul li a:hover{color:rgba(255,255,255,.8);padding-left:4px}
+.ft-col ul li a:hover::before{width:8px}
+.ft-bot{max-width:1300px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding-top:24px;flex-wrap:wrap;gap:12px}
+.ft-bot p{font-size:.72rem;color:rgba(255,255,255,.15)}
+.ft-bot-right{font-size:.72rem;color:rgba(255,255,255,.15)}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{opacity:0;transform:translateY(100%)}to{opacity:1;transform:none}}
+@keyframes pulseRing{0%{transform:scale(1);opacity:.8}100%{transform:scale(2.5);opacity:0}}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes scrollAnim{from{left:-100%}to{left:100%}}
+@keyframes floatUp{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes gradShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes borderGlow{0%,100%{box-shadow:0 0 0 rgba(88,176,179,0)}50%{box-shadow:0 0 20px rgba(88,176,179,.15)}}
+
+/* ── REVEAL ANIMATIONS ── */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+.reveal.visible{opacity:1;transform:none}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+.reveal-left.visible{opacity:1;transform:none}
+.reveal-right{opacity:0;transform:translateX(40px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+.reveal-right.visible{opacity:1;transform:none}
+.d1{transition-delay:.1s}
+.d2{transition-delay:.2s}
+.d3{transition-delay:.3s}
+.d4{transition-delay:.4s}
+.d5{transition-delay:.5s}
+.d6{transition-delay:.6s}
+
+/* ── SCROLL PROGRESS ── */
+#progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(–teal3),var(–teal));z-index:200;transition:width .1s;box-shadow:0 0 10px rgba(88,176,179,.5)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){
+.srv-grid{grid-template-columns:repeat(2,1fr)}
+.gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+.gitem-big{grid-row:auto}
+.doctor-inner,.equip-inner,.loc-inner{grid-template-columns:1fr}
+.stats-grid{grid-template-columns:repeat(2,1fr)}
+.testi-grid{grid-template-columns:1fr 1fr}
+.ft-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+header{padding:0 24px;height:68px}
+header.scrolled{height:58px}
+nav{display:none}
+.burger{display:flex}
+.hero-content{padding:0 24px 72px}
+.section-inner{padding:0 24px}
+.srv-grid{grid-template-columns:1fr}
+.stats-grid{grid-template-columns:1fr 1fr}
+.gallery-grid{grid-template-columns:1fr}
+.testi-grid{grid-template-columns:1fr}
+.srv-header{grid-template-columns:1fr}
+.ft-grid{grid-template-columns:1fr;gap:32px}
+.ft-bot{flex-direction:column;align-items:flex-start}
+.infostrip-in{flex-direction:column;padding:0 24px}
+.inf{border-right:none;border-bottom:1px solid rgba(255,255,255,.05);padding:12px 0;margin-right:0;width:100%}
+.inf:last-child{border-bottom:none}
+.cta-section{padding:80px 24px}
+footer{padding:60px 24px 24px}
+.hero-dots{right:20px;bottom:72px}
+.scroll-hint{left:24px}
+.doctor-img-wrap img{height:380px}
+.equip-imgs img{height:160px}
+.equip-imgs img:first-child{height:200px}
+}
+@media(max-width:480px){
+.hero-actions{flex-direction:column;width:100%}
+.btn-primary,.btn-ghost{width:100%;justify-content:center}
+.cta-btns{flex-direction:column;align-items:center}
+.cta-btns .btn-primary,.cta-btns .btn-ghost{width:100%;justify-content:center;max-width:340px}
+}
+</style>
+
+</head>
+<body>
+
+<!-- SCROLL PROGRESS -->
+
+<div id="progress"></div>
+
+<!-- CUSTOM CURSOR -->
+
+<div id="cursor">
+  <div class="cur-dot" id="curDot"></div>
+  <div class="cur-ring" id="curRing"></div>
+</div>
+
+<!-- PARTICLES CANVAS -->
+
+<canvas id="particles"></canvas>
+
+<!-- HEADER -->
+
+<header id="hdr">
+  <a href="#home" class="logo">
+    <img src="SnapInsta.to_623286672_18093397174943883_7290629576634285368_n-removebg-preview.png" alt="OrisCura" class="logo-img">
+    <div class="logo-divider"></div>
+    <div class="logo-text">
+      <span class="logo-name"><span class="c1">ORIS</span><span class="c2">CURA</span></span>
+      <span class="logo-sub">Odontoiatria Specialistica</span>
+    </div>
+  </a>
+  <nav>
+    <a href="#servizi">Servizi</a>
+    <a href="#studio">Studio</a>
+    <a href="#dove-siamo">Dove Siamo</a>
+    <a href="#dove-siamo" class="nav-btn"><span>Prenota</span></a>
+  </nav>
+  <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+</header>
+
+<!-- MOBILE NAV -->
+
+<nav class="mob-nav" id="mobNav">
+  <a href="#servizi" class="ml">Servizi</a>
+  <a href="#studio" class="ml">Lo Studio</a>
+  <a href="#dove-siamo" class="ml">Dove Siamo</a>
+  <a href="#dove-siamo" class="ml">→ Prenota Visita</a>
+</nav>
+
+<!-- HERO -->
+
+<section id="home" class="hero">
+  <div class="hero-bg">
+    <div class="hero-slides">
+      <div class="hslide hs1 active"></div>
+      <div class="hslide hs2"></div>
+      <div class="hslide hs3"></div>
+      <div class="hslide hs4"></div>
+    </div>
+  </div>
+  <div class="hero-dots">
+    <div class="hdot active" data-i="0"></div>
+    <div class="hdot" data-i="1"></div>
+    <div class="hdot" data-i="2"></div>
+    <div class="hdot" data-i="3"></div>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    <span>Scorri</span>
+  </div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <div class="pulse"></div>
+      <span>Studio Dentistico · Corato, Puglia</span>
+    </div>
+    <h1 class="hero-title">
+      <span class="line"><span class="word l1">Il Tuo</span></span>
+      <span class="line"><span class="word l2">Sorriso,</span></span>
+      <span class="line"><span class="word l3 ac">La Nostra</span></span>
+      <span class="line"><span class="word l3" style="animation-delay:.9s">Missione</span></span>
+    </h1>
+    <p class="hero-sub">Eccellenza odontoiatrica a Corato. Tecnologie d'avanguardia per un sorriso che dura nel tempo.</p>
+    <div class="hero-actions">
+      <a href="#dove-siamo" class="btn-primary">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M8 6L21 12 8 18V6z"/></svg>
+        <span>Prenota una Visita</span>
+      </a>
+      <a href="#servizi" class="btn-ghost">Scopri i Servizi <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+  </div>
+  <div class="hero-line"></div>
+</section>
+
+<!-- TICKER -->
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="ticker-item"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Lun–Ven: 10–12 / 16–19<span class="ticker-dot"></span></span>
+    <span class="ticker-item"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.09a16 16 0 006 6"/></svg>080 817 0385<span class="ticker-dot"></span></span>
+    <span class="ticker-item"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Via M.R. Imbriani, 72 – Corato<span class="ticker-dot"></span></span>
+    <span class="ticker-item"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/></svg>@oris_cura<span class="ticker-dot"></span></span>
+    <span class="ticker-item">Implantologia · Ortodonzia · Endodonzia · Estetica<span class="ticker-dot"></span></span>
+    <!-- duplicate for seamless loop -->
+    <span class="ticker-item"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Lun–Ven: 10–12 / 16–19<span class="ticker-dot"></span></span>
+    <span class="ticker-item"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.09a16 16 0 006 6"/></svg>080 817 0385<span class="ticker-dot"></span></span>
+    <span class="ticker-item"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Via M.R. Imbriani, 72 – Corato<span class="ticker-dot"></span></span>
+    <span class="ticker-item"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/></svg>@oris_cura<span class="ticker-dot"></span></span>
+    <span class="ticker-item">Implantologia · Ortodonzia · Endodonzia · Estetica<span class="ticker-dot"></span></span>
+  </div>
+</div>
+
+<!-- INFO STRIP -->
+
+<div class="infostrip">
+  <div class="infostrip-in">
+    <div class="inf">
+      <div class="inf-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div class="inf-text"><span class="inf-label">Orari</span><span class="inf-val"><strong>Lun–Ven</strong> 10–12 / 16–19</span></div>
+    </div>
+    <div class="inf">
+      <div class="inf-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.09a16 16 0 006 6l.36-.36a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+      <div class="inf-text"><span class="inf-label">Telefono</span><span class="inf-val"><strong>080 817 0385</strong> · 380 688 1599</span></div>
+    </div>
+    <div class="inf">
+      <div class="inf-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+      <div class="inf-text"><span class="inf-label">Indirizzo</span><span class="inf-val">Via M.R. Imbriani, 72 – <strong>Corato</strong></span></div>
+    </div>
+    <div class="inf">
+      <div class="inf-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></div>
+      <div class="inf-text"><span class="inf-label">Instagram</span><span class="inf-val">@<strong>oris_cura</strong></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+
+<section id="servizi" class="services">
+  <div class="section-inner">
+    <div class="srv-header">
+      <div class="reveal">
+        <p class="s-eyebrow">Cosa Offriamo</p>
+        <h2 class="s-title">I Nostri <em>Servizi</em></h2>
+      </div>
+      <p class="srv-desc reveal d2">Trattamenti su misura, dalla prevenzione alla chirurgia specialistica, con tecnologie di ultima generazione.</p>
+    </div>
+    <div class="srv-grid">
+      <div class="srv-card reveal">
+        <p class="srv-num">01</p>
+        <img src="3F3A3472.jpg" alt="Igiene Dentale" class="srv-img">
+        <h3 class="srv-name">Igiene Dentale</h3>
+        <p class="srv-body">Pulizia professionale per rimuovere placca e tartaro, base di ogni sorriso sano e duraturo.</p>
+        <div class="srv-arrow"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+      <div class="srv-card reveal d1">
+        <p class="srv-num">02</p>
+        <img src="17-instagram.jpg" alt="Ortodonzia" class="srv-img">
+        <h3 class="srv-name">Ortodonzia</h3>
+        <p class="srv-body">Allineamento dentale per un sorriso esteticamente perfetto e funzionalmente ottimale.</p>
+        <div class="srv-arrow"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+      <div class="srv-card reveal d2">
+        <p class="srv-num">03</p>
+        <img src="impiantologA.jpg" alt="Implantologia" class="srv-img">
+        <h3 class="srv-name">Implantologia</h3>
+        <p class="srv-body">Impianti di alta qualità per ripristinare il sorriso con soluzioni dall'aspetto naturale.</p>
+        <div class="srv-arrow"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+      <div class="srv-card reveal d3">
+        <p class="srv-num">04</p>
+        <img src="endodonzia-elite-odontoiatrica-1024x683.jpg" alt="Endodonzia" class="srv-img">
+        <h3 class="srv-name">Endodonzia</h3>
+        <p class="srv-body">Trattamento canalare di precisione per salvare il dente in modo sicuro e duraturo.</p>
+        <div class="srv-arrow"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+      <div class="srv-card reveal d4">
+        <p class="srv-num">05</p>
+        <img src="prima-visita-dentistica.jpg" alt="Prima Visita" class="srv-img">
+        <h3 class="srv-name">Prima Visita</h3>
+        <p class="srv-body">Valutazione completa con piano di cura personalizzato, pensato per te e per il tuo benessere.</p>
+        <div class="srv-arrow"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+      <div class="srv-card reveal d5">
+        <p class="srv-num">06</p>
+        <img src="thumbnail_IMG_5260.jpg" alt="Estetica" class="srv-img">
+        <h3 class="srv-name">Estetica del Sorriso</h3>
+        <p class="srv-body">Protesi, disturbi ATM e trattamenti estetici per un sorriso armonioso e luminoso.</p>
+        <div class="srv-arrow"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+
+<div class="stats">
+  <div class="section-inner">
+    <div class="stats-grid">
+      <div class="stat-item reveal"><div class="stat-num"><span class="count" data-target="15">0</span>+</div><div class="stat-label">Anni di Esperienza</div></div>
+      <div class="stat-item reveal d1"><div class="stat-num"><span class="count" data-target="5000">0</span>+</div><div class="stat-label">Pazienti Soddisfatti</div></div>
+      <div class="stat-item reveal d2"><div class="stat-num"><span class="count" data-target="6">0</span></div><div class="stat-label">Specializzazioni</div></div>
+      <div class="stat-item reveal d3"><div class="stat-num"><span class="count" data-target="100">0</span><span>%</span></div><div class="stat-label">Materiale Sterilizzato</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- GALLERY -->
+
+<section id="studio" class="gallery">
+  <div class="section-inner">
+    <div class="gallery-header reveal">
+      <p class="s-eyebrow">Lo Studio in Immagini</p>
+      <h2 class="s-title">Uno <em>Spazio</em> Unico</h2>
+    </div>
+    <div class="gallery-grid">
+      <div class="gitem gitem-big reveal">
+        <video autoplay muted loop playsinline src="video1.mp4" poster="poster1.jpg"></video>
+        <div class="gitem-overlay"><span class="gitem-label">Esperienza</span></div>
+        <span class="gitem-badge">Video</span>
+      </div>
+      <div class="gitem reveal d1">
+        <img src="IMG_3591.png" alt="Il Nostro Studio">
+        <div class="gitem-overlay"><span class="gitem-label">Il Nostro Studio</span></div>
+        <span class="gitem-badge">Foto</span>
+      </div>
+      <div class="gitem reveal d2">
+        <video autoplay muted loop playsinline src="video2.mp4" poster="poster2.jpg"></video>
+        <div class="gitem-overlay"><span class="gitem-label">Sala Secondaria</span></div>
+        <span class="gitem-badge">Video</span>
+      </div>
+      <div class="gitem reveal d3">
+        <img src="IMG_3637.png" alt="Intervento">
+        <div class="gitem-overlay"><span class="gitem-label">Precisione</span></div>
+        <span class="gitem-badge">Foto</span>
+      </div>
+      <div class="gitem reveal d4">
+        <img src="IMG_3635.png" alt="Sala Principale">
+        <div class="gitem-overlay"><span class="gitem-label">Sala Principale</span></div>
+        <span class="gitem-badge">Foto</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DOCTOR -->
+
+<section class="doctor">
+  <div class="section-inner">
+    <div class="doctor-inner">
+      <div class="doctor-visual reveal-left">
+        <div class="deco-line"></div>
+        <div class="doctor-img-wrap">
+          <img src="Dr._Aldo_Grammatica-removebg-preview.png" alt="Dr. Cataldo Grammatica">
+          <div class="doctor-badge">
+            <p class="doctor-badge-title">Direttore Sanitario</p>
+            <p class="doctor-badge-name">Dr. Cataldo Grammatica</p>
+            <p class="doctor-badge-sub">N. 388 Albo Odontoiatri BAT</p>
+          </div>
+        </div>
+      </div>
+      <div class="doctor-content reveal-right">
+        <p class="s-eyebrow">Il Nostro Team</p>
+        <h2 class="s-title">Esperienza &<br><em>Passione</em></h2>
+        <p class="doctor-text">Lo studio OrisCura nasce dalla visione del Dr. Cataldo Grammatica: un luogo dove la competenza clinica si unisce all'attenzione genuina per il paziente. Ogni trattamento è pensato con cura, precisione e rispetto per la tua salute.</p>
+        <div class="doctor-feats">
+          <div class="dfeat">
+            <div class="dfeat-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <span class="dfeat-text">Materiali Certificati</span>
+          </div>
+          <div class="dfeat">
+            <div class="dfeat-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+            <span class="dfeat-text">Solo su Appuntamento</span>
+          </div>
+          <div class="dfeat">
+            <div class="dfeat-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4.93 4.93a10 10 0 1014.14 14.14A10 10 0 004.93 4.93"/><path d="M9 12l2 2 4-4"/></svg></div>
+            <span class="dfeat-text">Protocolli Sterilizzazione</span>
+          </div>
+          <div class="dfeat">
+            <div class="dfeat-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+            <span class="dfeat-text">Approccio Empatico</span>
+          </div>
+        </div>
+        <a href="#dove-siamo" class="btn-primary">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M8 6L21 12 8 18V6z"/></svg>
+          <span>Prenota Visita</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EQUIPMENT -->
+
+<section class="equipment">
+  <div class="section-inner">
+    <div class="equip-inner">
+      <div class="equip-content reveal-left">
+        <p class="s-eyebrow">Strumentazione</p>
+        <h2 class="s-title">Tecnologia<br><em>d'Avanguardia</em></h2>
+        <p class="equip-text">Investiamo nel continuo aggiornamento del nostro team e in strumenti diagnostici di nuova generazione per trattamenti precisi, sicuri e confortevoli.</p>
+        <div class="equip-tags">
+          <span class="etag">Strumenti di Eccellenza</span>
+          <span class="etag">Alta Qualità</span>
+          <span class="etag">Team Specializzato</span>
+          <span class="etag">Sterilizzazione Certificata</span>
+          <span class="etag">Diagnostica Avanzata</span>
+        </div>
+      </div>
+      <div class="equip-imgs reveal-right">
+        <img src="IMG_8505.png" alt="Sala Principale">
+        <img src="IMG_8504.png" alt="DEXIS OPT">
+        <img src="IMG_8506.png" alt="Sala Operatoria">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+
+<section class="testi">
+  <div class="section-inner">
+    <div class="testi-header reveal">
+      <p class="s-eyebrow">Recensioni</p>
+      <h2 class="s-title">Cosa Dicono i<br><em>Nostri Pazienti</em></h2>
+    </div>
+    <div class="testi-grid">
+      <div class="tcard reveal d1">
+        <div class="tcard-stars">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="tcard-quote">Studio eccezionale, professionalità e cura del paziente impeccabili. Il dottor Grammatica è un professionista straordinario. Consiglio vivamente.</p>
+        <div class="tcard-author">
+          <div class="tcard-avatar">M</div>
+          <div><div class="tcard-name">Maria R.</div><div class="tcard-loc">Corato</div></div>
+        </div>
+      </div>
+      <div class="tcard reveal d2">
+        <div class="tcard-stars">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="tcard-quote">Finalmente ho trovato uno studio dove mi sento davvero a mio agio. Ambiente pulito, moderno, staff gentilissimo. Il mio sorriso non è mai stato così bello!</p>
+        <div class="tcard-author">
+          <div class="tcard-avatar" style="background:linear-gradient(135deg,#a8845a,#c9a96e)">L</div>
+          <div><div class="tcard-name">Luigi P.</div><div class="tcard-loc">Barletta</div></div>
+        </div>
+      </div>
+      <div class="tcard reveal d3">
+        <div class="tcard-stars">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="tcard-quote">Operazione di implantologia perfettamente riuscita. Zero dolore durante e dopo l'intervento. Grazie per l'estrema professionalità dimostrata in ogni fase.</p>
+        <div class="tcard-author">
+          <div class="tcard-avatar" style="background:linear-gradient(135deg,#1d6568,#58b0b3)">A</div>
+          <div><div class="tcard-name">Anna C.</div><div class="tcard-loc">Trani</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION -->
+
+<section id="dove-siamo" class="location">
+  <div class="section-inner">
+    <div class="loc-inner">
+      <div class="loc-info reveal-left">
+        <p class="s-eyebrow">Contatti & Orari</p>
+        <h2 class="s-title">Vieni a<br><em>Trovarci</em></h2>
+        <div class="contact-item">
+          <div class="ci-icon"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><p class="ci-label">Indirizzo</p><p class="ci-value">Via M.R. Imbriani, 72<br>70033 Corato (BT)</p></div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-icon"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.09a16 16 0 006 6l.36-.36a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+          <div><p class="ci-label">Telefono</p><p class="ci-value"><a href="tel:+390808170385">080 817 0385</a> · <a href="tel:+393806881599">380 688 1599</a></p></div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-icon"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div><p class="ci-label">Email</p><p class="ci-value"><a href="mailto:oriscura10@gmail.com">oriscura10@gmail.com</a></p></div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-icon"><svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div><p class="ci-label">Orari</p><p class="ci-value">Lun–Ven: 10:00–12:00 / 16:00–19:00<br><small>Solo su appuntamento</small></p></div>
+        </div>
+      </div>
+      <div class="map-wrap reveal-right">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3004.323321253266!2d16.409141575866002!3d41.14929577133117!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x13380f8aa5a36d75%3A0x75283965b4708489!2sOris%20Cura%20Srl%20%2F%20Stp!5e0!3m2!1sit!2sit!4v1724703948782!5m2!1sit!2sit" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+
+<section class="cta-section">
+  <div class="cta-bg"></div>
+  <div class="cta-bg-lines"></div>
+  <div class="cta-inner reveal">
+    <p class="s-eyebrow" style="justify-content:center">Inizia Ora</p>
+    <h2 class="cta-title">Prenota la Tua<br><em>Prima Visita</em></h2>
+    <p class="cta-sub">Il primo passo verso un sorriso sano è una telefonata. Contattaci per fissare il tuo appuntamento.</p>
+    <div class="cta-btns">
+      <a href="tel:+390808170385" class="btn-primary">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.09a16 16 0 006 6l.36-.36a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        <span>Chiama Ora</span>
+      </a>
+      <a href="mailto:oriscura10@gmail.com" class="btn-ghost">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Scrivi una Email
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+
+<footer>
+  <div class="ft-grid">
+    <div class="ft-brand">
+      <div class="logo-name"><span class="c1">ORIS</span><span class="c2">CURA</span></div>
+      <p>Studio di Odontoiatria Specialistica SRL/STP.<br>Dir. San. Dr. Cataldo Grammatica – N. 388 Albo Odontoiatri BAT.</p>
+      <div class="ft-socials">
+        <a href="https://www.instagram.com/oris_cura/" class="ft-soc" target="_blank" rel="noopener">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="https://www.instagram.com/dr.aldogrammatica/" class="ft-soc" target="_blank" rel="noopener">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="ft-col">
+      <h4>Servizi</h4>
+      <ul>
+        <li><a href="#servizi">Igiene Dentale</a></li>
+        <li><a href="#servizi">Ortodonzia</a></li>
+        <li><a href="#servizi">Implantologia</a></li>
+        <li><a href="#servizi">Endodonzia</a></li>
+        <li><a href="#servizi">Estetica del Sorriso</a></li>
+      </ul>
+    </div>
+    <div class="ft-col">
+      <h4>Studio</h4>
+      <ul>
+        <li><a href="#studio">Galleria</a></li>
+        <li><a href="#studio">Il Team</a></li>
+        <li><a href="#dove-siamo">Dove Siamo</a></li>
+        <li><a href="#dove-siamo">Orari</a></li>
+      </ul>
+    </div>
+    <div class="ft-col">
+      <h4>Contatti</h4>
+      <ul>
+        <li><a href="tel:+390808170385">080 817 0385</a></li>
+        <li><a href="tel:+393806881599">380 688 1599</a></li>
+        <li><a href="mailto:oriscura10@gmail.com">oriscura10@gmail.com</a></li>
+        <li><a href="#">Via M.R. Imbriani, 72</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ft-bot">
+    <p>© 2026 OrisCura SRL/STP – Tutti i diritti riservati.</p>
+    <span class="ft-bot-right">Corato, Puglia · Italy</span>
+  </div>
+</footer>
+
+<script>
+// ── CURSOR ──────────────────────────────────────
+const dot = document.getElementById('curDot');
+const ring = document.getElementById('curRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+function animRing(){rx+=(mx-rx)*.18;ry+=(my-ry)*.18;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+animRing();
+document.querySelectorAll('a,button,.srv-card,.gitem,.tcard,.dfeat,.etag,.hdot').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
+});
+document.addEventListener('mouseleave',()=>{dot.style.opacity='0';ring.style.opacity='0'});
+document.addEventListener('mouseenter',()=>{dot.style.opacity='1';ring.style.opacity='1'});
+
+// ── PARTICLES ──────────────────────────────────
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let W,H,particles=[];
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize();
+window.addEventListener('resize',resize);
+class Particle{
+  constructor(){this.reset();}
+  reset(){this.x=Math.random()*W;this.y=Math.random()*H;this.vx=(Math.random()-.5)*.3;this.vy=(Math.random()-.5)*.3;this.size=Math.random()*1.5+.5;this.opacity=Math.random()*.4+.1;this.color=Math.random()>.7?'88,176,179':'255,255,255';}
+  update(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>W||this.y<0||this.y>H)this.reset();}
+  draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fillStyle=`rgba(${this.color},${this.opacity})`;ctx.fill();}
+}
+for(let i=0;i<80;i++)particles.push(new Particle());
+function drawConnections(){
+  for(let i=0;i<particles.length;i++){
+    for(let j=i+1;j<particles.length;j++){
+      const d=Math.hypot(particles[i].x-particles[j].x,particles[i].y-particles[j].y);
+      if(d<120){ctx.beginPath();ctx.moveTo(particles[i].x,particles[i].y);ctx.lineTo(particles[j].x,particles[j].y);ctx.strokeStyle=`rgba(88,176,179,${.04*(1-d/120)})`;ctx.lineWidth=.5;ctx.stroke();}
+    }
+  }
+}
+function animParticles(){ctx.clearRect(0,0,W,H);particles.forEach(p=>{p.update();p.draw();});drawConnections();requestAnimationFrame(animParticles);}
+animParticles();
+
+// ── HERO SLIDESHOW ──────────────────────────────
+const slides=document.querySelectorAll('.hslide'),hdots=document.querySelectorAll('.hdot');
+let cur=0;
+function goTo(i){slides[cur].classList.remove('active');hdots[cur].classList.remove('active');cur=i;slides[cur].classList.add('active');hdots[cur].classList.add('active');}
+hdots.forEach(d=>d.addEventListener('click',()=>goTo(+d.dataset.i)));
+setInterval(()=>goTo((cur+1)%slides.length),5000);
+
+// ── HEADER SCROLL ──────────────────────────────
+const hdr=document.getElementById('hdr');
+window.addEventListener('scroll',()=>hdr.classList.toggle('scrolled',scrollY>80),{passive:true});
+
+// ── SCROLL PROGRESS ────────────────────────────
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{const p=scrollY/(document.body.scrollHeight-innerHeight);prog.style.width=(p*100)+'%';},{passive:true});
+
+// ── MOBILE NAV ─────────────────────────────────
+const burger=document.getElementById('burger'),mob=document.getElementById('mobNav');
+burger.addEventListener('click',()=>{burger.classList.toggle('open');mob.classList.toggle('open');document.body.style.overflow=mob.classList.contains('open')?'hidden':'';});
+mob.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{burger.classList.remove('open');mob.classList.remove('open');document.body.style.overflow='';}));
+
+// ── REVEAL ANIMATIONS ──────────────────────────
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}});
+},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>observer.observe(el));
+
+// ── COUNTER ANIMATION ──────────────────────────
+function animCount(el,target,duration=1800){
+  let start=0,step=target/duration*16;
+  const interval=setInterval(()=>{
+    start=Math.min(start+step,target);
+    el.textContent=Math.floor(start).toLocaleString('it-IT');
+    if(start>=target){el.textContent=target.toLocaleString('it-IT');clearInterval(interval);}
+  },16);
+}
+const counterObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.count').forEach(c=>animCount(c,+c.dataset.target));
+      counterObs.unobserve(e.target);
+    }
+  });
+},{threshold:.3});
+document.querySelectorAll('.stats-grid').forEach(el=>counterObs.observe(el));
+</script>
+
+</body>
+</html>
